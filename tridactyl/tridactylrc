@@ -1,0 +1,6 @@
+" General Settings
+set configversion 2.0
+set theme dracula
+
+" For syntax highlighting see https://github.com/tridactyl/vim-tridactyl
+" vim: set filetype=vim
