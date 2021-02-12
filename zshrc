@@ -59,6 +59,9 @@ zinit load BurntSushi/ripgrep
 zinit ice as"program" from"gh-r"
 zinit load ericchiang/pup
 
+zinit ice as"program" from"gh-r" pick"*/delta"
+zinit load dandavison/delta
+
 zinit ice as"program" from"gh-r"
 zinit light starship/starship
 eval "$(starship init zsh)"
