@@ -33,7 +33,7 @@ for_window [class=".*"] title_format "<span foreground='transparent'>%title</spa
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec WINIT_X11_SCALE_FACTOR=1 alacritty
+bindsym $mod+Return exec alacritty
 
 focus_follows_mouse no
 
