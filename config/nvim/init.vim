@@ -21,7 +21,7 @@ set backspace=indent,eol,start
 set expandtab shiftwidth=2 softtabstop=2 tabstop=2
 set foldmethod=syntax foldcolumn=1 foldlevelstart=10
 set hidden
-set incsearch nohlsearch ignorecase smartcase
+set incsearch ignorecase nohlsearch smartcase
 set laststatus=2
 set mouse=a
 set nobackup nowritebackup noswapfile
@@ -36,6 +36,7 @@ set signcolumn=auto
 set splitbelow splitright
 set termguicolors
 set updatetime=300
+set wildcharm=<C-z>
 set wildignorecase
 set wildmenu
 set wildmode=longest:list
@@ -46,6 +47,9 @@ syntax enable
 silent! colorscheme dracula
 
 cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!|  " Save with sudo
+
+cnoremap <expr> <S-tab> getcmdtype() =~ "[/?]" ? "<C-t>" : "<S-tab>"
+cnoremap <expr> <tab> getcmdtype() =~ "[/?]" ? "<C-g>" : "<C-z>"
 
 map <C-h> <C-w>h
 map <C-j> <C-w>j
