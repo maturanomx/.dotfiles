@@ -21,7 +21,7 @@ set backspace=indent,eol,start
 set expandtab shiftwidth=2 softtabstop=2 tabstop=2
 set foldmethod=syntax foldcolumn=1 foldlevelstart=10
 set hidden
-set incsearch ignorecase nohlsearch smartcase
+set ignorecase incsearch nohlsearch smartcase
 set laststatus=2
 set mouse=a
 set nobackup nowritebackup noswapfile
@@ -42,7 +42,8 @@ set wildmenu
 set wildmode=longest:list
 set wildoptions=tagfile
 
-syntax enable
+filetype plugin indent on
+syntax on
 
 silent! colorscheme dracula
 
@@ -73,6 +74,9 @@ nnoremap <leader>h :History<CR>
 nnoremap J mzJ`z|   " Keep cursor in place when joining lines
 nnoremap K <nop>
 nnoremap Q <nop>
+
+inoremap <F1> <nop>
+inoremap jk <Esc>
 
 " Plugins
 let g:airline_powerline_fonts=1
