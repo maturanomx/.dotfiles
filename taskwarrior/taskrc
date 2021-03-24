@@ -1,4 +1,3 @@
-# [Created by task 2.6.0 3/10/2021 13:57:01]
 # Taskwarrior program configuration file.
 # For more documentation, see http://taskwarrior.org or try 'man task', 'man task-color',
 # 'man task-sync' or 'man taskrc'
@@ -35,3 +34,41 @@ data.location=~/.task
 #include /usr/local/share/doc/task/rc/solarized-light-256.theme
 #include /usr/local/share/doc/task/rc/no-color.theme
 
+# Bugwarrior UDAs
+uda.gmaillabels.label=GMail labels
+uda.gmaillabels.type=string
+uda.gmaillastmessageid.label=Last RFC2822 Message-ID
+uda.gmaillastmessageid.type=string
+uda.gmaillastsender.label=GMail last sender name
+uda.gmaillastsender.type=string
+uda.gmaillastsenderaddr.label=GMail last sender address
+uda.gmaillastsenderaddr.type=string
+uda.gmailsnippet.label=GMail snippet
+uda.gmailsnippet.type=string
+uda.gmailsubject.label=GMail Subject
+uda.gmailsubject.type=string
+uda.gmailthreadid.label=GMail Thread Id
+uda.gmailthreadid.type=string
+uda.gmailurl.label=GMail URL
+uda.gmailurl.type=string
+uda.jiracreatedts.label=Created At
+uda.jiracreatedts.type=date
+uda.jiradescription.label=Jira Description
+uda.jiradescription.type=string
+uda.jiraestimate.label=Estimate
+uda.jiraestimate.type=numeric
+uda.jirafixversion.label=Fix Version
+uda.jirafixversion.type=string
+uda.jiraid.label=Jira Issue ID
+uda.jiraid.type=string
+uda.jiraissuetype.label=Issue Type
+uda.jiraissuetype.type=string
+uda.jirastatus.label=Jira Status
+uda.jirastatus.type=string
+uda.jirasubtasks.label=Jira Subtasks
+uda.jirasubtasks.type=string
+uda.jirasummary.label=Jira Summary
+uda.jirasummary.type=string
+uda.jiraurl.label=Jira URL
+uda.jiraurl.type=string
+# END Bugwarrior UDAs

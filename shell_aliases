@@ -1,10 +1,10 @@
-alias ..='cd ..'
 alias ...='cd ../..'
-
-#alias ls='ls --color=auto --group-directories-first'
-alias ll='ls -lv'
+alias ..='cd ..'
 alias la='ls -A'
+alias ll='ls -lv'
 
 alias grep='grep --color=auto '
-
 alias httpserver='python -m SimpleHTTPServer'
+# alias ls='ls --color=auto --group-directories-first'
+alias t='task'
+alias tw='timew'
