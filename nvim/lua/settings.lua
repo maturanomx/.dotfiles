@@ -47,3 +47,5 @@ b.swapfile = false
 b.textwidth = 120
 b.undofile = true
 -- }
+
+vim.cmd('silent! colorscheme dracula')
