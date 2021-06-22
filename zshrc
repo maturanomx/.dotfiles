@@ -43,7 +43,6 @@ autoload -Uz _zinit
 zinit light-mode for \
     hlissner/zsh-autopair \
     lukechilds/zsh-nvm \
-    rupa/z \
     zdharma/fast-syntax-highlighting \
     zinit-zsh/z-a-as-monitor \
     zinit-zsh/z-a-bin-gem-node \
@@ -52,6 +51,9 @@ zinit light-mode for \
     zsh-users/zsh-autosuggestions \
     zsh-users/zsh-completions \
 
+
+zinit ice as"program" from"gh-r" pick"*/zoxide" atload'eval "$(zoxide init zsh)"'
+zinit load ajeetdsouza/zoxide
 
 zinit ice as"program" from"gh-r" mv"ripgrep* -> rg" pick"rg/rg"
 zinit load BurntSushi/ripgrep
@@ -62,9 +64,8 @@ zinit load ericchiang/pup
 zinit ice as"program" from"gh-r" pick"*/delta"
 zinit load dandavison/delta
 
-zinit ice as"program" from"gh-r"
+zinit ice as"program" from"gh-r" atload'eval "$(starship init zsh)"'
 zinit light starship/starship
-eval "$(starship init zsh)"
 
 zinit ice as"program" from"gh-r" mv"jq-* -> jq"
 zinit load stedolan/jq
