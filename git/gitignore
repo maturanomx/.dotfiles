@@ -1,0 +1,18 @@
+# Editors and IDEs
+*~
+.idea/
+.settings/
+.vscode/
+nbproject/
+*.sublime-*
+[._]*.s[a-w][a-z]
+
+# ctags
+tags
+tags.lock
+tags.temp
+
+# Enviroment
+.env
+.out
+.envrc

@@ -1,0 +1,19 @@
+[core]
+	editor = vim
+	excludesfile = ~/.dotfiles/git/gitignore
+
+[color]
+	ui = true
+
+[push]
+	default = current
+
+[alias]
+	co = checkout
+	lg = log --graph --abbrev-commit --pretty=format:'%C(yellow)%h%Creset%Cred%d%Creset %Cgreen(%ai)%Creset %C(bold blue)%an%Creset%n%Creset%B' --stat
+
+[credential]
+	helper = cache --timeout=3600
+
+[include]
+	path = ~/.private/gitconfig
