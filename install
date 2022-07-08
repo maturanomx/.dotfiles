@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+link() {
+	rm -f "${2}"
+	ln -s "${1}" "${2}"
+}
+
+
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 
 source ${SCRIPT_DIR}/variables
@@ -7,6 +13,12 @@ mkdir -p ${HOME}/.private
 
 # GIT
 touch ${HOME}/.private/gitconfig
-ln -s ${DOTFILES}/git/gitconfig ${HOME}/.gitconfig
+link ${DOTFILES}/git/gitconfig ${HOME}/.gitconfig
+
+# ZSH
+link ${DOTFILES}/variables ${HOME}/.zshenv
+link ${DOTFILES}/zsh/zshrc ${HOME}/.zshrc
+link ${DOTFILES}/zsh/zimrc ${HOME}/.zimrc
+
 
 # vim: noet ci pi sts=0 sw=4 ts=4
