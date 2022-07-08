@@ -39,4 +39,8 @@ unset key
 
 source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
 
+if [ -x "$(command -v zoxide)" ]; then
+  eval "$(zoxide init zsh)"
+fi
+
 # vim: noet ci pi sts=0 sw=4 ts=4
