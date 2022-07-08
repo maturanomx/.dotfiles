@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+brew update
+
+brew install asdf
+brew install direnv
+brew install gnu-sed
+brew install neovim
+brew install tree
+brew install zsh
