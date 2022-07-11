@@ -16,3 +16,4 @@ tags.temp
 .env
 .out
 .envrc
+.tool-versions
