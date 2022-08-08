@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 link() {
-	rm -f "${2}"
-	ln -s "${1}" "${2}"
+	rm -rf "${2}"
+	ln -sv "${1}" "${2}"
 }
 
 
@@ -21,6 +21,9 @@ link ${DOTFILES}/git/gitconfig ${HOME}/.gitconfig
 link ${DOTFILES}/variables ${HOME}/.zshenv
 link ${DOTFILES}/zsh/zshrc ${HOME}/.zshrc
 link ${DOTFILES}/zsh/zimrc ${HOME}/.zimrc
+
+# Kitty
+link ${DOTFILES}/kitty ${HOME}/.config/kitty
 
 
 # vim: noet ci pi sts=0 sw=4 ts=4
