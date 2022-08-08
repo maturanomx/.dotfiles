@@ -17,3 +17,9 @@
 
 [include]
 	path = ~/.private/gitconfig
+
+[fetch]
+	prune = true
+
+[pull]
+	rebase = true
