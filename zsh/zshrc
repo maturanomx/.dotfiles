@@ -6,9 +6,8 @@ WORDCHARS=${WORDCHARS//[\/]}		# Remove path separator from WORDCHARS
 # zsh-users/zsh-autosuggestions is the last module in your ~/.zimrc
 ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 
-# Set what highlighters will be used
-# See https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters.md
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
+source ${HOME}/.dotfiles/variables
+source ${DOTFILES}/zsh/catppuccin-zsh-syntax-highlighting.zsh
 
 ZIM_HOME=${ZDOTDIR:-${HOME}}/.zim	# zimfm home directory
 
