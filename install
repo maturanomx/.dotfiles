@@ -25,5 +25,9 @@ link ${DOTFILES}/zsh/zimrc ${HOME}/.zimrc
 # Kitty
 link ${DOTFILES}/kitty ${HOME}/.config/kitty
 
+# bat
+link ${DOTFILES}/bat ${HOME}/.config/bat
+bat cache --build
+
 
 # vim: noet ci pi sts=0 sw=4 ts=4
