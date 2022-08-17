@@ -1,6 +1,7 @@
 [core]
 	editor = vim
 	excludesfile = ~/.dotfiles/git/gitignore
+	pager = delta
 
 [color]
 	ui = true
@@ -15,11 +16,27 @@
 [credential]
 	helper = cache --timeout=3600
 
-[include]
-	path = ~/.private/gitconfig
-
 [fetch]
 	prune = true
 
 [pull]
 	rebase = true
+
+[interactive]
+	diffFiter = delta --color only
+
+[add.interactive]
+	useBuiltin = false
+
+[delta]
+	navigate = true
+	light = false
+
+[merge]
+	conflictstyle = diff3
+
+[diff]
+	colorMoved = default
+
+[include]
+	path = ~/.private/gitconfig
