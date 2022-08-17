@@ -10,6 +10,7 @@ brew install fzf
 brew install git-delta
 brew install gnu-sed
 brew install jq
+brew install mike-engel/jwt-cli/jwt-cli
 brew install neovim
 brew install ripgrep
 brew install tree
