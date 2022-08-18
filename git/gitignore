@@ -12,8 +12,11 @@ tags
 tags.lock
 tags.temp
 
-# Enviroment
+# Environment
 .env
 .out
 .envrc
 .tool-versions
+
+# SO
+.DS_Store
