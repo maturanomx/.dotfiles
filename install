@@ -8,7 +8,7 @@ link() {
 
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 
-source ${SCRIPT_DIR}/variables
+source ${SCRIPT_DIR}/environment
 source ${SCRIPT_DIR}/software_mac
 
 mkdir -p ${HOME}/.private
@@ -18,7 +18,7 @@ touch ${HOME}/.private/gitconfig
 link ${DOTFILES}/git/gitconfig ${HOME}/.gitconfig
 
 # ZSH
-link ${DOTFILES}/variables ${HOME}/.zshenv
+link ${DOTFILES}/environment ${HOME}/.zshenv
 link ${DOTFILES}/zsh/zshrc ${HOME}/.zshrc
 link ${DOTFILES}/zsh/zimrc ${HOME}/.zimrc
 
