@@ -1,42 +1,51 @@
+[include]
+	path = ~/.private/gitconfig
+
+[add.interactive]
+	useBuiltin = false
+
+[alias]
+	co = checkout
+	lg = log --graph --abbrev-commit --pretty=format:'%C(yellow)%h%Creset%Cred%d%Creset %Cgreen(%ai)%Creset %C(bold blue)%an%Creset%n%Creset%B' --stat
+	vdiff = -c delta.side-by-side=true diff
+
+[color]
+	ui = true
+
 [core]
 	editor = vim
 	excludesfile = ~/.dotfiles/git/gitignore
 	pager = delta
 
-[color]
-	ui = true
-
-[push]
-	default = current
-
-[alias]
-	co = checkout
-	lg = log --graph --abbrev-commit --pretty=format:'%C(yellow)%h%Creset%Cred%d%Creset %Cgreen(%ai)%Creset %C(bold blue)%an%Creset%n%Creset%B' --stat
-
 [credential]
 	helper = cache --timeout=3600
 
-[fetch]
-	prune = true
-
-[pull]
-	rebase = true
-
-[interactive]
-	diffFiter = delta --color only
-
-[add.interactive]
-	useBuiltin = false
-
 [delta]
+	features = decorations
 	navigate = true
-	light = false
 
-[merge]
-	conflictstyle = diff3
+[delta "decorations"]
+	file-style = omit
+	hunk-header-decoration-style = blue box
+	hunk-header-style = file line-number syntax
 
 [diff]
 	colorMoved = default
 
-[include]
-	path = ~/.private/gitconfig
+[fetch]
+	prune = true
+
+[init]
+	defaultBranch = main
+
+[interactive]
+	diffFilter = delta --color-only --features=interactive
+
+[merge]
+	conflictstyle = diff3
+
+[pull]
+	rebase = true
+
+[push]
+	default = current
