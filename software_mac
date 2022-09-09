@@ -14,5 +14,6 @@ brew install mike-engel/jwt-cli/jwt-cli
 brew install neovim
 brew install ripgrep
 brew install tree
+brew install tree-sitter
 brew install zoxide
 brew install zsh

@@ -29,5 +29,10 @@ link ${DOTFILES}/kitty ${HOME}/.config/kitty
 link ${DOTFILES}/bat ${HOME}/.config/bat
 bat cache --build
 
+# nvim
+rm -rf ~/.config/nvim ~/.local/share/nvim ~/.cache/nvim
+git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1 && nvim
+link ${DOTFILES}/nvim ${HOME}/.config/nvim/lua/custom
+
 
 # vim: noet ci pi sts=0 sw=4 ts=4

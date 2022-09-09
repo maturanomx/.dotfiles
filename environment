@@ -1,6 +1,16 @@
 export DOTFILES=${HOME}/.dotfiles
 
-alias jwt="jwt decode --iso8601"
 alias cat="bat"
+alias jwt="jwt decode --iso8601"
+alias vim="nvim"
+
+nvim () {
+	unset NPM_CONFIG_USERCONFIG && asdf direnv shell \
+		nodejs 18.4.0 \
+		python 3.10 \
+		rust 1.63.0 \
+		-- /usr/local/bin/nvim "${@:1}"
+
+}
 
 # vim: noet ci pi sts=0 sw=4 ts=4 ft=sh
