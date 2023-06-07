@@ -9,13 +9,6 @@ zmodule input 					# Applies correct bindkeys for input events
 zmodule termtitle 				# Sets a custom terminal title
 zmodule utility 				# Utility aliases and functions. Adds colour to ls, grep and less
 
-zmodule asdf --on-pull '\
-	   asdf plugin-add direnv \
-	&& asdf direnv setup --shell zsh --version system \
-	&& asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git \
-	&& asdf install nodejs latest \
-	&& asdf global nodejs latest'
-
 # Prompt
 
 zmodule spaceship-prompt/spaceship-prompt --name spaceship --no-submodules

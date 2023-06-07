@@ -35,7 +35,7 @@ for key ('k') bindkey -M vicmd ${key} history-substring-search-up
 for key ('j') bindkey -M vicmd ${key} history-substring-search-down
 unset key
 
-source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
+eval "$(rtx activate zsh)"
 
 if [ -x "$(command -v zoxide)" ]; then
   eval "$(zoxide init zsh)"
