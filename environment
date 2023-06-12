@@ -3,4 +3,8 @@ export DOTFILES=${HOME}/.dotfiles
 alias jwt="jwt decode --iso8601"
 alias cat="bat"
 
+nvim() {
+	rtx x node@18 -- /usr/local/bin/nvim "$@"
+}
+
 # vim: noet ci pi sts=0 sw=4 ts=4 ft=sh
