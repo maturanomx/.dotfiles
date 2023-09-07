@@ -18,6 +18,7 @@ tags.temp
 .out
 .rtx.toml
 .tool-versions
+.venv
 
 # SO
 .DS_Store

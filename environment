@@ -1,6 +1,6 @@
 export DOTFILES=${HOME}/.dotfiles
 
-alias jwt="jwt decode --iso8601"
+alias jwt="jwt decode "
 alias cat="bat"
 
 nvim() {

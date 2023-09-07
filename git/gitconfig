@@ -13,7 +13,7 @@
 	ui = true
 
 [core]
-	editor = vim
+	editor = nvim
 	excludesfile = ~/.dotfiles/git/gitignore
 	pager = delta
 
