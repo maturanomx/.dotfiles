@@ -15,7 +15,7 @@
 [core]
 	editor = nvim
 	excludesfile = ~/.dotfiles/git/gitignore
-	pager = delta
+#	pager = delta
 
 [credential]
 	helper = cache --timeout=3600
@@ -49,3 +49,5 @@
 
 [push]
 	default = current
+
+# vim: noet ci pi sts=0 sw=4 ts=4 ft=dosini

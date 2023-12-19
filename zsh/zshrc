@@ -1,3 +1,4 @@
+# TODO: brew install and setup
 setopt HIST_IGNORE_ALL_DUPS			# Remove older command from the history if a duplicate is to be added
 bindkey -e							# Set editor default keymap to emacs (`-e`) or vi (`-v`)
 WORDCHARS=${WORDCHARS//[\/]}		# Remove path separator from WORDCHARS
@@ -35,10 +36,18 @@ for key ('k') bindkey -M vicmd ${key} history-substring-search-up
 for key ('j') bindkey -M vicmd ${key} history-substring-search-down
 unset key
 
-eval "$(rtx activate zsh)"
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+# if [ -x "$(command -v rtx)" ]; then
+  eval "$(rtx activate zsh)"
+# fi
 
 if [ -x "$(command -v zoxide)" ]; then
   eval "$(zoxide init zsh)"
 fi
+
+export STARSHIP_CONFIG="${DOTFILES}/zsh/starship.toml"
+eval "$(starship init zsh)"
 
 # vim: noet ci pi sts=0 sw=4 ts=4

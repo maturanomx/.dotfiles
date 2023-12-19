@@ -5,8 +5,16 @@ link() {
 	ln -sv "${1}" "${2}"
 }
 
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
-SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+# sudo apt-get install build-essential procps curl file git build-essential
+
+# test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+# test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
+
+# rtx install nodejs@lts
+# rtx global nodejs@lts
 
 source ${SCRIPT_DIR}/environment
 
@@ -27,6 +35,5 @@ link ${DOTFILES}/kitty ${HOME}/.config/kitty
 # bat
 link ${DOTFILES}/bat ${HOME}/.config/bat
 bat cache --build
-
 
 # vim: noet ci pi sts=0 sw=4 ts=4
