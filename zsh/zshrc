@@ -35,10 +35,13 @@ for key ('k') bindkey -M vicmd ${key} history-substring-search-up
 for key ('j') bindkey -M vicmd ${key} history-substring-search-down
 unset key
 
-eval "$(rtx activate zsh)"
+eval "$(/opt/homebrew/bin/brew shellenv)"
+eval "$(mise activate zsh)"
 
 if [ -x "$(command -v zoxide)" ]; then
   eval "$(zoxide init zsh)"
 fi
+
+eval "$(starship init zsh)"
 
 # vim: noet ci pi sts=0 sw=4 ts=4
