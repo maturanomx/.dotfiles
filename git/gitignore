@@ -15,6 +15,7 @@ tags.temp
 # Environment
 .env
 .envrc
+.mise.toml
 .out
 .rtx.toml
 .tool-versions
