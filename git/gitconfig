@@ -1,13 +1,9 @@
 [include]
 	path = ~/.private/gitconfig
 
-[add.interactive]
-	useBuiltin = false
-
 [alias]
 	co = checkout
 	lg = log --graph --abbrev-commit --pretty=format:'%C(yellow)%h%Creset%Cred%d%Creset %Cgreen(%ai)%Creset %C(bold blue)%an%Creset%n%Creset%B' --stat
-	vdiff = -c delta.side-by-side=true diff
 
 [color]
 	ui = true
@@ -15,19 +11,9 @@
 [core]
 	editor = nvim
 	excludesfile = ~/.dotfiles/git/gitignore
-	pager = delta
 
 [credential]
 	helper = cache --timeout=3600
-
-[delta]
-	features = decorations
-	navigate = true
-
-[delta "decorations"]
-	file-style = omit
-	hunk-header-decoration-style = blue box
-	hunk-header-style = file line-number syntax
 
 [diff]
 	colorMoved = default
@@ -38,11 +24,8 @@
 [init]
 	defaultBranch = main
 
-[interactive]
-	diffFilter = delta --color-only --features=interactive
-
 [merge]
-	conflictstyle = diff3
+	conflictstyle = zdiff3
 
 [pull]
 	rebase = true
