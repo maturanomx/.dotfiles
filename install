@@ -18,7 +18,6 @@ link ${DOTFILES}/git/gitconfig ${HOME}/.gitconfig
 
 # ZSH
 link ${DOTFILES}/environment ${HOME}/.zshenv
-link ${DOTFILES}/zsh/startship.toml ${HOME}/.config/startship.toml
 link ${DOTFILES}/zsh/zimrc ${HOME}/.zimrc
 link ${DOTFILES}/zsh/zshrc ${HOME}/.zshrc
 

@@ -47,6 +47,7 @@ if [ -x "$(command -v zoxide)" ]; then
   eval "$(zoxide init zsh --cmd cd)"
 fi
 
+export STARSHIP_CONFIG=${DOTFILES}/zsh/starship.toml
 eval "$(starship init zsh)"
 
 # vim: noet ci pi sts=0 sw=4 ts=4

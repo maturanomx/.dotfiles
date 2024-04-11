@@ -4,6 +4,7 @@ add_newline = false
 format = """$directory$character"""
 palette = "catppuccin_mocha"
 right_format = """$all"""
+scan_timeout = 700
 
 [package]
 disabled = true
