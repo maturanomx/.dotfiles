@@ -15,6 +15,7 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup {
   spec = {
     { 'LazyVim/LazyVim', import = 'lazyvim.plugins', opts = { colorscheme = 'catppuccin-mocha' } },
+    { 'folke/which-key.nvim', opts = { icons = { separator = '' } } },
   },
   defaults = {
     lazy = false,
