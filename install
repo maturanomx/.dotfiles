@@ -22,6 +22,7 @@ link ${DOTFILES}/zsh/zimrc ${HOME}/.zimrc
 link ${DOTFILES}/zsh/zshrc ${HOME}/.zshrc
 
 link ${DOTFILES}/bat ${HOME}/.config/bat
+link ${DOTFILES}/hammerspoon ${HOME}/.hammerspoon
 link ${DOTFILES}/kitty ${HOME}/.config/kitty
 link ${DOTFILES}/nvim ${HOME}/.config/nvim
 
