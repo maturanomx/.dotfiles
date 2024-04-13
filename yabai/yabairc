@@ -1,0 +1,13 @@
+# for this to work first nedd configure sudo such that it will be able to run the command without password
+yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+sudo yabai --load-sa
+
+yabai -m config layout bsp
+
+yabai -m config bottom_padding 7
+yabai -m config left_padding   7
+yabai -m config right_padding  7
+yabai -m config top_padding    7
+yabai -m config window_gap     7
+
+# vim: noet ci pi sts=0 sw=4 ts=4

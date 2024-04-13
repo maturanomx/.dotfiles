@@ -24,6 +24,8 @@ link ${DOTFILES}/zsh/zshrc ${HOME}/.zshrc
 link ${DOTFILES}/bat ${HOME}/.config/bat
 link ${DOTFILES}/kitty ${HOME}/.config/kitty
 link ${DOTFILES}/nvim ${HOME}/.config/nvim
+link ${DOTFILES}/yabai/skhdrc $HOME/.skhdrc
+link ${DOTFILES}/yabai/yabairc $HOME/.yabairc
 
 # Install Homebrew
 # TODO: skip prompt
