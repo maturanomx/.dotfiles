@@ -1,4 +1,13 @@
-export DOTFILES=${HOME}/.dotfiles
+DOTFILES=${HOME}/.dotfiles
+
+FPATH="${HOMEBREW_PREFIX}/share/zsh/site-functions:$FPATH"
+WORDCHARS=${WORDCHARS//[\/]/} # Remove path separator from WORDCHARS
+ZIM_CONFIG_FILE=${DOTFILES}/zsh/zimrc
+ZIM_HOME=${ZDOTDIR:-${HOME}}/.zim # zimfm home directory
+ZLE_RPROMPT_INDENT=0              # right prompt
+ZSH_AUTOSUGGEST_MANUAL_REBIND=1   # Check zsh-users/zsh-autosuggestions is the last module in your ~/.zimrc
+
+export STARSHIP_CONFIG=${DOTFILES}/zsh/starship.toml
 
 alias jwt="jwt decode "
 alias cat="bat"

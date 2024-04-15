@@ -1,36 +1,23 @@
-setopt HIST_IGNORE_ALL_DUPS			# Remove older command from the history if a duplicate is to be added
 bindkey -e							# Set editor default keymap to emacs (`-e`) or vi (`-v`)
-WORDCHARS=${WORDCHARS//[\/]}		# Remove path separator from WORDCHARS
 
-export FZF_DEFAULT_OPTS=" \
---color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
---color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
---color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
+__getZim () {
+	local __zimfw="https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh"
+	if (( ${+commands[curl]} )); then
+		curl -fsSL --create-dirs -o ${ZIM_HOME}/zimfw.zsh ${__zimfw}
+	else
+		mkdir -p ${ZIM_HOME} && wget -nv -O ${ZIM_HOME}/zimfw.zsh ${__zimfw}
+	fi
+}
 
-# Disable automatic widget re-binding on each precmd. This can be set when
-# zsh-users/zsh-autosuggestions is the last module in your ~/.zimrc
-ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 
-source ${DOTFILES}/zsh/catppuccin-zsh-syntax-highlighting.zsh
+zstyle ':zim:input' double-dot-expand yes
 
-ZIM_HOME=${ZDOTDIR:-${HOME}}/.zim	# zimfm home directory
+# Download zimfw plugin manager if missing
+[[ ! -e ${ZIM_HOME}/zimfw.zsh ]] && __getZim
+# Install missing modules, and update ${ZIM_HOME}/init.zsh if missing or outdated
+[[ ! ${ZIM_HOME}/init.zsh -nt ${ZIM_CONFIG_FILE} ]] && source ${DOTFILES}/zsh/zimfw.zsh init -q
+source ${ZIM_HOME}/init.zsh
 
-# Download zimfw plugin manager if missing.
-if [[ ! -e ${ZIM_HOME}/zimfw.zsh ]]; then
-  if (( ${+commands[curl]} )); then
-    curl -fsSL --create-dirs -o ${ZIM_HOME}/zimfw.zsh \
-        https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
-  else
-    mkdir -p ${ZIM_HOME} && wget -nv -O ${ZIM_HOME}/zimfw.zsh \
-        https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
-  fi
-fi
-
-# Install missing modules, and update ${ZIM_HOME}/init.zsh if missing or outdated.
-if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZDOTDIR:-${HOME}}/.zimrc ]]; then
-  source ${ZIM_HOME}/zimfw.zsh init -q
-fi
-source ${ZIM_HOME}/init.zsh			# Initialize modules
 
 zmodload -F zsh/terminfo +p:terminfo
 # Bind ^[[A/^[[B manually so up/down works both before and after zle-line-init
@@ -40,14 +27,7 @@ for key ('k') bindkey -M vicmd ${key} history-substring-search-up
 for key ('j') bindkey -M vicmd ${key} history-substring-search-down
 unset key
 
-eval "$(/opt/homebrew/bin/brew shellenv)"
-eval "$(mise activate zsh)"
 
-if [ -x "$(command -v zoxide)" ]; then
-  eval "$(zoxide init zsh --cmd cd)"
-fi
-
-export STARSHIP_CONFIG=${DOTFILES}/zsh/starship.toml
-eval "$(starship init zsh)"
+eval "$(zoxide init zsh --cmd cd)"
 
 # vim: noet ci pi sts=0 sw=4 ts=4

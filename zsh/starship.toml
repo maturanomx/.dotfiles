@@ -1,10 +1,13 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
-add_newline = false
+add_newline = true
 format = """$directory$character"""
 palette = "catppuccin_mocha"
 right_format = """$all"""
 scan_timeout = 700
+
+[directory.substitutions]
+'gibraltar_insights_service/services/' = '󰪥 '
 
 [package]
 disabled = true
