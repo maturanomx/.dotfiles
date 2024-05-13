@@ -1,10 +1,10 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 add_newline = true
+command_timeout = 700
 format = """$directory$character"""
 palette = "catppuccin_mocha"
 right_format = """$all"""
-scan_timeout = 700
 
 [directory.substitutions]
 'insights/services/' = ''
