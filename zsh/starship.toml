@@ -7,7 +7,19 @@ right_format = """$all"""
 scan_timeout = 700
 
 [directory.substitutions]
-'gibraltar_insights_service/services/' = '󰪥 '
+'insights/services/' = ''
+'health-care-provider' = 'hcp'
+'patient-with-diabetes' = 'pwd'
+
+[docker_context]
+disabled = true
+
+[git_branch]
+symbol = " "
+format = "[$symbol$branch(:$remote_branch)]($style) "
+
+[nodejs]
+format = "[$symbol($version )]($style)"
 
 [package]
 disabled = true

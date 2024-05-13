@@ -1,4 +1,4 @@
-bindkey -e							# Set editor default keymap to emacs (`-e`) or vi (`-v`)
+bindkey -e	# Set editor default keymap to emacs (`-e`) or vi (`-v`)
 
 __getZim () {
 	local __zimfw="https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh"
@@ -15,7 +15,7 @@ zstyle ':zim:input' double-dot-expand yes
 # Download zimfw plugin manager if missing
 [[ ! -e ${ZIM_HOME}/zimfw.zsh ]] && __getZim
 # Install missing modules, and update ${ZIM_HOME}/init.zsh if missing or outdated
-[[ ! ${ZIM_HOME}/init.zsh -nt ${ZIM_CONFIG_FILE} ]] && source ${DOTFILES}/zsh/zimfw.zsh init -q
+[[ ! ${ZIM_HOME}/init.zsh -nt ${ZIM_CONFIG_FILE} ]] && source ${ZIM_HOME}/zimfw.zsh init -q
 source ${ZIM_HOME}/init.zsh
 
 

@@ -1,6 +1,5 @@
 DOTFILES=${HOME}/.dotfiles
 
-FPATH="${HOMEBREW_PREFIX}/share/zsh/site-functions:$FPATH"
 WORDCHARS=${WORDCHARS//[\/]/} # Remove path separator from WORDCHARS
 ZIM_CONFIG_FILE=${DOTFILES}/zsh/zimrc
 ZIM_HOME=${ZDOTDIR:-${HOME}}/.zim # zimfm home directory
