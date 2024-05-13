@@ -1,11 +1,49 @@
 cmd - return : kitty --single-instance -d ~
 
+# window focus
 alt - h : yabai -m window --focus west
 alt - j : yabai -m window --focus south
 alt - k : yabai -m window --focus north
 alt - l : yabai -m window --focus east
+alt - left  : yabai -m window --focus west
+alt - down  : yabai -m window --focus south
+alt - up    : yabai -m window --focus north
+alt - right : yabai -m window --focus east
 
+# window move
 shift + alt - h : yabai -m window --warp west
 shift + alt - j : yabai -m window --warp south
 shift + alt - k : yabai -m window --warp north
 shift + alt - l : yabai -m window --warp east
+shift + alt - left  : yabai -m window --warp west
+shift + alt - down  : yabai -m window --warp south
+shift + alt - up    : yabai -m window --warp north
+shift + alt - right : yabai -m window --warp east
+
+# space and window mode change
+# alt - e : yabai -m space --balance
+alt - f : yabai -m window --toggle zoom-fullscreen
+alt - m : yabai -m window --toggle float --grid 6:6:1:1:4:4
+alt - r : yabai -m space --rotate 270
+alt - x : yabai -m space --mirror x-axis
+alt - y : yabai -m space --mirror y-axis
+
+# window move to prev and next space
+shift + alt + ctrl - h : yabai -m window --space prev;
+shift + alt + ctrl - l : yabai -m window --space next;
+
+# window to spaces
+shift + alt - 1 : yabai -m window --space 1;
+shift + alt - 2 : yabai -m window --space 2;
+shift + alt - 3 : yabai -m window --space 3;
+shift + alt - 4 : yabai -m window --space 4;
+shift + alt - 5 : yabai -m window --space 5;
+shift + alt - 6 : yabai -m window --space 6;
+shift + alt - 7 : yabai -m window --space 7;
+shift + alt - 8 : yabai -m window --space 8;
+shift + alt - 9 : yabai -m window --space 9;
+
+# shift + ctrl + alt - h : yabai -m window --display west; yabai -m display --focus west
+# shift + ctrl + alt - l : yabai -m window --display east; yabai -m display --focus east
+# alt - s : yabai -m display --focus west
+# alt - g : yabai -m display --focus east
