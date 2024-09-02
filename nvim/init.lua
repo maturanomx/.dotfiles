@@ -25,7 +25,6 @@ require("lazy").setup({
 				transparent_background = true,
 			},
 		},
-
 		{
 			"folke/snacks.nvim",
 			opts = {
