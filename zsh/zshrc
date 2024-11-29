@@ -21,7 +21,9 @@ source ${ZIM_HOME}/init.zsh
 
 zmodload -F zsh/terminfo +p:terminfo
 
-
+eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
+eval "$(mise activate zsh)"
+eval "$(starship init zsh)"
 eval "$(zoxide init zsh --cmd cd)"
 
 # vim: noet ci pi sts=0 sw=4 ts=4

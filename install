@@ -1,19 +1,54 @@
 #!/usr/bin/env bash
 
-link() {
-	rm -rf "${2}"
-	ln -sv "${1}" "${2}"
-}
-
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
-
 source ${SCRIPT_DIR}/environment
 
-mkdir -p ${HOME}/.config
-mkdir -p ${HOME}/.private
+link() {
+	if [[ ! -L "${2}" || "$(readlink "${2}")" != "${1}" ]]; then
+		rm -rf "${2}"
+		ln -sv "${1}" "${2}"
+	fi
+}
+
+OS="$(uname)"
+SSH_TYPE="ed25519"
+SSH_FILENAME="${HOME}/.ssh/id_${SSH_TYPE}"
+
+if [[ "${OS}" == "Linux" ]]; then
+	HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
+
+	sudo apt update
+	sudo apt -y upgrade
+	sudo apt -y install build-essential procps curl file git
+elif [[ "${OS}" == "Darwin" ]]; then
+	HOMEBREW_PREFIX="/opt/homebrew"
+
+else
+	echo "Unsupported OS"
+	exit 1
+fi
+
+if [[ ! -f "${SSH_FILENAME}" ]]; then
+	ssh-keygen -t "${SSH_TYPE}" -N "" -f "${SSH_FILENAME}" -C "$(hostname)"
+fi
+
+if [[ ! -x "${HOMEBREW_PREFIX}/bin/brew" ]]; then
+	NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+
+eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
+brew bundle --file="${DOTFILES}/Brewfile"
+
+mkdir -p ${HOME}/.{config,private}
 
 # GIT
-touch ${HOME}/.private/gitconfig
+read -p "Enter you name: " NAME
+read -p "Enter your email: " EMAIL
+cat <<_git_user >${HOME}/.private/gitconfig
+[user]
+	email = ${EMAIL}
+	name = ${NAME}
+_git_user
 link ${DOTFILES}/git/gitconfig ${HOME}/.gitconfig
 
 # ZSH
@@ -21,21 +56,17 @@ link ${DOTFILES}/environment ${HOME}/.zshenv
 link ${DOTFILES}/zsh/zshrc ${HOME}/.zshrc
 
 link ${DOTFILES}/bat ${HOME}/.config/bat
-link ${DOTFILES}/kitty ${HOME}/.config/kitty
 link ${DOTFILES}/nvim ${HOME}/.config/nvim
-link ${DOTFILES}/yabai/skhdrc $HOME/.skhdrc
-link ${DOTFILES}/yabai/yabairc $HOME/.yabairc
+link ${DOTFILES}/mise ${HOME}/.config/mise
 
-# Install Homebrew
-# TODO: skip prompt
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-eval "$(/opt/homebrew/bin/brew shellenv)"
+if [[ $(grep -q "${HOMEBREW_PREFIX}/bin/zsh" /etc/shells) ]]; then
+	echo "${HOMEBREW_PREFIX}/bin/zsh" | sudo tee -a /etc/shells
+fi
 
-# TODO: brew install
+if [[ "$(basename "${SHELL}")" != "zsh" || "${SHELL}" != "${HOMEBREW_PREFIX}/bin/zsh" ]]; then
+	chsh -s "${HOMEBREW_PREFIX}/bin/zsh"
+fi
 
 bat cache --build
-
-# TODO: ssh-keygen -t ed25519 -C ""
-# TODO: fast-theme ${DOTFILES}/zsh/catppuccin-mocha
 
 # vim: noet ci pi sts=0 sw=4 ts=4
