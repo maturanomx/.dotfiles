@@ -15,8 +15,8 @@ ZSH_AUTOSUGGEST_MANUAL_REBIND=1   # Check zsh-users/zsh-autosuggestions is the l
 export MISE_NODE_DEFAULT_PACKAGES_FILE=${DOTFILES}/mise/default-npm-packages
 export STARSHIP_CONFIG=${DOTFILES}/zsh/starship.toml
 
-alias jwt="jwt decode "
 alias cat="bat"
+alias jwt="jwt decode "
 
 nvim() {
 	mise x node@lts -- "${HOMEBREW_PREFIX}/bin/nvim" "$@"
