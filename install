@@ -58,7 +58,6 @@ link ${DOTFILES}/zsh/zshrc ${HOME}/.zshrc
 
 link ${DOTFILES}/bat ${HOME}/.config/bat
 link ${DOTFILES}/nvim ${HOME}/.config/nvim
-link ${DOTFILES}/mise ${HOME}/.config/mise
 
 if [[ $(grep -q "${HOMEBREW_PREFIX}/bin/zsh" /etc/shells) ]]; then
 	echo "${HOMEBREW_PREFIX}/bin/zsh" | sudo tee -a /etc/shells

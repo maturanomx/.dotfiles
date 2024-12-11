@@ -8,6 +8,7 @@ right_format = """$all"""
 
 [directory.substitutions]
 'insights/services/' = ''
+'insights_1.4/services/' = '1.4/'
 'health-care-provider' = 'hcp'
 'patient-with-diabetes' = 'pwd'
 
