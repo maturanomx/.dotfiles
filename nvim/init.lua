@@ -14,7 +14,16 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup {
   spec = {
-    { 'LazyVim/LazyVim', import = 'lazyvim.plugins', opts = { colorscheme = 'catppuccin-mocha' } },
+    { 'folke/tokyonight.nvim', enabled = false },
+    {
+      'catppuccin/nvim',
+      lazy = false,
+      name = 'catppuccin',
+      opts = { flavour = 'mocha', transparent_background = true },
+    },
+    { 'LazyVim/LazyVim', import = 'lazyvim.plugins', opts = { colorscheme = 'catppuccin' } },
+    { import = 'lazyvim.plugins.extras.lang.sql' },
+    { import = 'lazyvim.plugins.extras.lang.typescript' },
   },
   defaults = {
     lazy = false,
