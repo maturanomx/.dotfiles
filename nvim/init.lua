@@ -14,14 +14,27 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup {
   spec = {
-    { 'folke/tokyonight.nvim', enabled = false },
     {
       'catppuccin/nvim',
       lazy = false,
       name = 'catppuccin',
       opts = { flavour = 'mocha', transparent_background = true },
     },
+
+    { 'folke/tokyonight.nvim', enabled = false },
+
     { 'LazyVim/LazyVim', import = 'lazyvim.plugins', opts = { colorscheme = 'catppuccin' } },
+
+    {
+      'olimorris/codecompanion.nvim',
+      dependencies = {
+        'nvim-lua/plenary.nvim',
+        'nvim-treesitter/nvim-treesitter',
+      },
+      config = true,
+      opts = { adapters = { opts = { proxy = 'socks5h://localhost:9090' } } },
+    },
+
     { import = 'lazyvim.plugins.extras.lang.sql' },
     { import = 'lazyvim.plugins.extras.lang.typescript' },
   },
