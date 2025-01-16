@@ -14,6 +14,7 @@ ZSH_AUTOSUGGEST_MANUAL_REBIND=1   # Check zsh-users/zsh-autosuggestions is the l
 
 export MISE_GLOBAL_CONFIG_FILE=${DOTFILES}/mise/config.toml
 export MISE_NODE_DEFAULT_PACKAGES_FILE=${DOTFILES}/mise/default-npm-packages
+export OBSIDIAN_VAULT=${HOME}/projects/brainotes
 export STARSHIP_CONFIG=${DOTFILES}/zsh/starship.toml
 
 alias cat="bat"

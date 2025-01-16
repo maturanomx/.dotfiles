@@ -21,9 +21,24 @@ require('lazy').setup {
       opts = { flavour = 'mocha', transparent_background = true },
     },
 
+    { 'folke/snacks.nvim', opts = { dashboard = { enabled = os.getenv 'NVIM_APP_NAME' == nil } } },
+
     { 'folke/tokyonight.nvim', enabled = false },
 
     { 'LazyVim/LazyVim', import = 'lazyvim.plugins', opts = { colorscheme = 'catppuccin' } },
+
+    {
+      'epwalsh/obsidian.nvim',
+      dependencies = { 'nvim-lua/plenary.nvim' },
+      enabled = os.getenv 'OBSIDIAN_VAULT' ~= nil,
+      ft = 'markdown',
+      lazy = os.getenv 'NVIM_APP_NAME' ~= 'journal',
+      version = '*',
+      opts = {
+        daily_notes = { date_format = '%Y/%m/%Y-%m-%d', folder = 'log' },
+        dir = os.getenv 'OBSIDIAN_VAULT',
+      },
+    },
 
     {
       'olimorris/codecompanion.nvim',
