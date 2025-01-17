@@ -33,11 +33,30 @@ require('lazy').setup {
       enabled = os.getenv 'OBSIDIAN_VAULT' ~= nil,
       ft = 'markdown',
       lazy = os.getenv 'NVIM_APP_NAME' ~= 'journal',
-      version = '*',
       opts = {
-        daily_notes = { date_format = '%Y/%m/%Y-%m-%d', folder = 'log' },
+        daily_notes = {
+          date_format = '%Y/%m/%Y-%m-%d',
+          default_tags = { 'log' },
+          folder = 'log',
+          template = 'daily.md',
+        },
         dir = os.getenv 'OBSIDIAN_VAULT',
+        templates = {
+          folder = '_templates',
+          substitutions = {
+            ['date:dddd, DD MMMM YYYY'] = function()
+              return os.date '%A, %d %B %Y'
+            end,
+            ['date:MMMM DD, YYYY'] = function()
+              return os.date '%b %d, %Y'
+            end,
+            ['date:WW'] = function()
+              return os.date '%V'
+            end,
+          },
+        },
       },
+      version = '*',
     },
 
     {
