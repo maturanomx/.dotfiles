@@ -64,7 +64,7 @@ if [[ $(grep -q "${HOMEBREW_PREFIX}/bin/zsh" /etc/shells) ]]; then
 	echo "${HOMEBREW_PREFIX}/bin/zsh" | sudo tee -a /etc/shells
 fi
 
-if [[ "$(basename "${SHELL}")" != "zsh" || "${SHELL}" != "${HOMEBREW_PREFIX}/bin/zsh" ]]; then
+if [[ "$(basename ${SHELL})" != "zsh" || "${SHELL}" != "${HOMEBREW_PREFIX}/bin/zsh" ]]; then
 	chsh -s "${HOMEBREW_PREFIX}/bin/zsh"
 fi
 
