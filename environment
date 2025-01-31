@@ -21,7 +21,7 @@ alias cat="bat"
 alias jwtd="jwt decode "
 
 nvim() {
-	mise x node@lts -- "${HOMEBREW_PREFIX}/bin/nvim" "$@"
+	mise x lua@5.1 node@lts -- "${HOMEBREW_PREFIX}/bin/nvim" "$@"
 }
 
 # vim: noet ci pi sts=0 sw=4 ts=4 ft=sh

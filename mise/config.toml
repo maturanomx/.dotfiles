@@ -4,3 +4,4 @@ idiomatic_version_file = false
 
 [tools]
 node = "lts"
+python = "3.13"

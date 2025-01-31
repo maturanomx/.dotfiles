@@ -17,6 +17,14 @@ require("lazy").setup({
 	},
 	spec = {
 		{
+			"3rd/image.nvim",
+			build = false,
+			opts = {
+				integrations = { markdown = { floating_windows = true, only_render_image_at_cursor = true } },
+			},
+		},
+
+		{
 			"catppuccin/nvim",
 			name = "catppuccin",
 			opts = {
@@ -53,6 +61,7 @@ require("lazy").setup({
 						end,
 					},
 				},
+				ui = { enabled = false },
 			},
 		},
 
@@ -87,6 +96,15 @@ require("lazy").setup({
 		{ "LazyVim/LazyVim", import = "lazyvim.plugins", opts = { colorscheme = "catppuccin" } },
 
 		{
+			"MeanderingProgrammer/render-markdown.nvim",
+			opts = {
+				checkbox = { checked = { scope_highlight = "@markup.strikethrough" } },
+				code = { left_pad = 2, sign = false },
+				heading = { sign = false },
+			},
+		},
+
+		{
 			"nvim-lualine/lualine.nvim",
 			opts = function(_, opts)
 				-- overwrite section from LazyVim
@@ -119,3 +137,4 @@ require("lazy").setup({
 })
 
 vim.opt.list = false
+vim.opt.wrap = false
