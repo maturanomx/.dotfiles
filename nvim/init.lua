@@ -17,59 +17,12 @@ require("lazy").setup({
 	},
 	spec = {
 		{
-			"3rd/image.nvim",
-			build = false,
-			opts = {
-				integrations = { markdown = { floating_windows = true, only_render_image_at_cursor = true } },
-			},
-		},
-
-		{
 			"catppuccin/nvim",
 			name = "catppuccin",
 			opts = {
 				flavour = "mocha",
 				integrations = { blink_cmp = true },
 				transparent_background = true,
-			},
-		},
-
-		{
-			"epwalsh/obsidian.nvim",
-			cond = os.getenv("OBSIDIAN_VAULT") ~= nil,
-			ft = "markdown",
-			lazy = os.getenv("NVIM_APP_NAME") ~= "journal",
-			opts = {
-				daily_notes = {
-					date_format = "%Y/%m/%Y-%m-%d",
-					default_tags = { "dailies" },
-					folder = "log",
-					template = "daily.md",
-				},
-				dir = os.getenv("OBSIDIAN_VAULT"),
-				templates = {
-					folder = "_templates",
-					substitutions = {
-						["date:dddd, DD MMMM YYYY"] = function()
-							return os.date("%A, %d %B %Y")
-						end,
-						["date:MMMM DD, YYYY"] = function()
-							return os.date("%b %d, %Y")
-						end,
-						["date:WW"] = function()
-							return os.date("%V")
-						end,
-					},
-				},
-				ui = { enabled = false },
-			},
-		},
-
-		{
-			"epwalsh/pomo.nvim",
-			-- Also see "nvim-lualine/lualine.nvim" above
-			opts = {
-				notifiers = { { name = "Default", opts = { sticky = false } } },
 			},
 		},
 
@@ -87,7 +40,6 @@ require("lazy").setup({
 					indent = { enabled = false },
 					scope = { enabled = false },
 				},
-				dashboard = { enabled = os.getenv("NVIM_APP_NAME") == nil },
 			},
 		},
 
@@ -104,32 +56,11 @@ require("lazy").setup({
 			},
 		},
 
-		{
-			"nvim-lualine/lualine.nvim",
-			opts = function(_, opts)
-				-- overwrite section from LazyVim
-				opts.sections.lualine_z = {
-					function()
-						local ok, pomo = pcall(require, "pomo")
-						if not ok then
-							return " " .. os.date("%R")
-						end
+		{ "olimorris/codecompanion.nvim", opts = {} },
 
-						local timer = pomo.get_first_to_finish()
-						if timer == nil then
-							return " " .. os.date("%R")
-						end
-
-						return "󰄉 " .. tostring(timer)
-					end,
-				}
-				return opts
-			end,
-		},
-
-		-- FIXME: make proxy dynamic
-		{ "olimorris/codecompanion.nvim", opts = { adapters = { opts = { proxy = "socks5h://localhost:9090" } } } },
-
+		{ import = "lazyvim.plugins.extras.lang.astro" },
+		{ import = "lazyvim.plugins.extras.lang.docker" },
+		{ import = "lazyvim.plugins.extras.lang.python" },
 		{ import = "lazyvim.plugins.extras.lang.sql" },
 		{ import = "lazyvim.plugins.extras.lang.typescript" },
 	},
@@ -137,4 +68,5 @@ require("lazy").setup({
 })
 
 vim.opt.list = false
-vim.opt.wrap = false
+
+-- vim: noet ci pi sts=0 sw=4 ts=4

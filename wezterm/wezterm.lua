@@ -5,35 +5,8 @@ local config = wezterm.config_builder()
 
 config = {
 	color_scheme = "Catppuccin Mocha",
-	font = wezterm.font_with_fallback({
-		"Victor Mono",
-		"Symbols Nerd Font Mono",
-	}),
 	hide_tab_bar_if_only_one_tab = true,
 	keys = {
-		{
-			mods = "CTRL|SHIFT",
-			key = "j",
-			action = wezterm.action_callback(function(win, pane)
-				-- FIXME: already defined on `environment`
-				local OBSIDIAN_VAULT = "~/projects/brainotes"
-
-				win:perform_action(
-					act.SwitchToWorkspace({
-						name = "journal",
-						spawn = {
-							args = { "nvim", "-c", ":ObsidianToday" },
-							cwd = OBSIDIAN_VAULT,
-							set_environment_variables = {
-								NVIM_APP_NAME = "journal",
-								OBSIDIAN_VAULT = OBSIDIAN_VAULT,
-							},
-						},
-					}),
-					pane
-				)
-			end),
-		},
 		{ mods = "CMD|OPT", key = "LeftArrow", action = act.ActivateTabRelative(-1) },
 		{ mods = "CMD|OPT", key = "RightArrow", action = act.ActivateTabRelative(1) },
 	},
@@ -48,3 +21,5 @@ config = {
 }
 
 return config
+
+-- vim: noet ci pi sts=0 sw=4 ts=4

@@ -22,8 +22,6 @@ source ${ZIM_HOME}/init.zsh
 zmodload -F zsh/terminfo +p:terminfo
 
 eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
-eval "$(mise activate zsh)"
-eval "$(starship init zsh)"
 eval "$(zoxide init zsh --cmd cd)"
 
 if [[ -f "${HOME}/.private/envars" ]]; then
