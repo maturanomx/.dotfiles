@@ -5,21 +5,37 @@
 	co = checkout
 	lg = log --graph --abbrev-commit --pretty=format:'%C(yellow)%h%Creset%Cred%d%Creset %Cgreen(%ai)%Creset %C(bold blue)%an%Creset%n%Creset%B' --stat
 
+[branch]
+	sort = -committerdate
+
 [color]
 	ui = true
 
+[column]
+	ui = auto
+
+[commit]
+	verbose = true
+
 [core]
-	editor = nvim
 	excludesfile = ~/.dotfiles/git/gitignore
 
 [credential]
 	helper = cache --timeout=3600
 
 [diff]
-	colorMoved = default
+	algorithm = histogram
+	colorMoved = plain
+	mnemonicPrefix = true
+	renames = true
 
 [fetch]
+	all = true
 	prune = true
+	pruneTags = true
+
+[help]
+	autocorrect = prompt
 
 [init]
 	defaultBranch = main
@@ -31,6 +47,21 @@
 	rebase = true
 
 [push]
-	default = current
+	autoSetupRemote = true
+	default = simple
+	followTags = true
+
+[rebase]
+	autoSquash = true
+	autoStash = true
+	updateRefs = true
+
+[rerere]
+	enabled = true
+	autoupdate = true
+
+[tag]
+	sort = version:refname
+
 
 # vim: noet ci pi sts=0 sw=4 ts=4 ft=dosini
