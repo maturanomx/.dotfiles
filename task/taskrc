@@ -1,0 +1,4 @@
+data.location=~/.private/task
+news.version=3.3.0
+
+include ./catppuccin.theme
