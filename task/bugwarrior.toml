@@ -1,0 +1,30 @@
+[general]
+annotation_comments = true
+annotation_length = 80
+annotation_links = true
+annotation_newlines = false
+description_length = 80
+inline_links = false
+log_file="/tmp/bugwarrior.log"
+log_level = "DEBUG"
+targets = [ "work" ]
+
+
+[notifications]
+backend = "applescript"
+notifications = true
+only_on_new_tasks = true
+
+[work]
+###### Import from Jira: https://bugwarrior.readthedocs.io/en/latest/services/jira.html
+# base_uri = "<must not have trailing slash>"
+# PAT = "<Personal Access Token>"
+# username = "<username>"
+add_tags = ["s_bw"]
+description_template = "{{jirasummary}}"
+import_labels_as_tags = false
+import_sprints_as_tags = true
+label_template = "{{label | replace('__B_', '')}}"
+project_template = "work"
+query = "assignee WAS currentUser() AND updatedDate > -20d ORDER BY updated DESC"
+service = "jira"

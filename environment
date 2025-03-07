@@ -12,6 +12,7 @@ ZIM_HOME=${ZDOTDIR:-${HOME}}/.zim # zimfm home directory
 ZLE_RPROMPT_INDENT=0              # right prompt
 ZSH_AUTOSUGGEST_MANUAL_REBIND=1   # Check zsh-users/zsh-autosuggestions is the last module in your ~/.zimrc
 
+export BUGWARRIORRC=${HOME}/.private/bugwarrior.toml
 export EDITOR=nvim
 export MISE_GLOBAL_CONFIG_FILE=${DOTFILES}/mise/config.toml
 export MISE_NODE_DEFAULT_PACKAGES_FILE=${DOTFILES}/mise/default-npm-packages
