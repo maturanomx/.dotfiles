@@ -21,10 +21,10 @@ only_on_new_tasks = true
 # PAT = "<Personal Access Token>"
 # username = "<username>"
 add_tags = ["s_bw"]
-description_template = "{{jirasummary}}"
+description_template = "{{ jirasummary | replace('\"', '') }}"
 import_labels_as_tags = false
 import_sprints_as_tags = true
-label_template = "{{label | replace('__B_', '')}}"
+label_template = "{{ label | replace('__B_', '') | replace('__M_Falcon_', '') }}"
 project_template = "work"
-query = "assignee WAS currentUser() AND updatedDate > -20d ORDER BY updated DESC"
+query = "assignee = currentUser() AND resolution = Unresolved AND type in standardIssueTypes() ORDER BY priority DESC, updated DESC"
 service = "jira"

@@ -3,6 +3,8 @@ default.command=list
 
 include ~/.dotfiles/task/catppuccin.theme
 
+alias.open=execute taskopen $@
+
 # Bugwarrior UDAs
 uda.jiraissuetype.type=string
 uda.jiraissuetype.label=Issue Type

@@ -18,10 +18,12 @@ export MISE_GLOBAL_CONFIG_FILE=${DOTFILES}/mise/config.toml
 export MISE_NODE_DEFAULT_PACKAGES_FILE=${DOTFILES}/mise/default-npm-packages
 export OBSIDIAN_VAULT=${HOME}/projects/brainotes
 export STARSHIP_CONFIG=${DOTFILES}/zsh/starship.toml
+export TASKOPENRC=${DOTFILES}/task/taskopen.ini
 export TASKRC=${DOTFILES}/task/taskrc
 
 alias cat="bat"
 alias jwtd="jwt decode "
+alias env="env | sort -i | rg -v LESS_ | rg -v __MISE"
 
 nvim() {
 	mise x lua@5.1 node@lts -- "${HOMEBREW_PREFIX}/bin/nvim" "$@"
