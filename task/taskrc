@@ -5,6 +5,9 @@ include ~/.dotfiles/task/catppuccin.theme
 
 alias.open=execute taskopen $@
 
+report.list.columns=id,start.age,entry.age,depends.indicator,priority,project,description.count,tags,recur.indicator,scheduled.countdown,due,until.remaining,urgency
+report.list.labels=ID,Active,Age,D,P,Project,Description,Tags,R,Sch,Due,Until,Urg
+
 # Bugwarrior UDAs
 uda.jiraissuetype.type=string
 uda.jiraissuetype.label=Issue Type
@@ -29,4 +32,5 @@ uda.jirasubtasks.label=Jira Subtasks
 uda.jiraparent.type=string
 uda.jiraparent.label=Jira Parent
 # END Bugwarrior UDAs
-news.version=3.3.0
+
+news.version=3.4.0

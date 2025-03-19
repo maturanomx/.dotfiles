@@ -1,6 +1,6 @@
 [settings]
 experimental = true
-idiomatic_version_file = false
+idiomatic_version_file = true
 
 [tools]
 node = "lts"
