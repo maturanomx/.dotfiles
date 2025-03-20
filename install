@@ -16,7 +16,7 @@ if [[ "${OS}" == "Linux" ]]; then
 
 	sudo apt update
 	sudo apt -y upgrade
-	sudo apt -y install build-essential procps curl file git
+	sudo apt -y install build-essential curl file git libreadline-dev procps
 elif [[ "${OS}" == "Darwin" ]]; then
 	HOMEBREW_PREFIX="/opt/homebrew"
 
@@ -62,7 +62,7 @@ link ${DOTFILES}/wezterm/wezterm.lua ${HOME}/.wezterm.lua
 
 cp ${DOTFILES}/task/bugwarrior.toml ${HOME}/.private/
 
-if [[ $(grep -q "${HOMEBREW_PREFIX}/bin/zsh" /etc/shells) ]]; then
+if [[ ! $(grep -q "${HOMEBREW_PREFIX}/bin/zsh" /etc/shells) ]]; then
 	echo "${HOMEBREW_PREFIX}/bin/zsh" | sudo tee -a /etc/shells
 fi
 
