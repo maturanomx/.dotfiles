@@ -7,8 +7,7 @@ palette = "catppuccin_mocha"
 right_format = """$all"""
 
 [directory.substitutions]
-'gibraltar/services/' = ''
-'gibraltar_1.4/services/' = '1.4/'
+'insights/services/' = ''
 'health-care-provider' = 'hcp'
 'patient-with-diabetes' = 'pwd'
 

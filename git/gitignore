@@ -20,6 +20,7 @@ tags.temp
 .rtx.toml
 .tool-versions
 .venv
+mise.toml
 
 # SO
 .DS_Store
