@@ -1,9 +1,7 @@
 [settings]
 experimental = true
-idiomatic_version_file = true
+idiomatic_version_file_enable_tools = ['node']
 
 [tools]
-node = "lts"
-python = "3.13"
-
-[env]
+node = 'lts'
+python = '3.13'
