@@ -7,6 +7,7 @@ zmodule joke/zim-mise
 zmodule joke/zim-starship
 zmodule termtitle # Sets a custom terminal title
 zmodule utility   # Utility aliases and functions. Adds colour to ls, grep and less
+
 # Additional completion definitions
 zmodule zsh-users/zsh-completions --fpath src --fpath ${HOMEBREW_PREFIX}/share/zsh/site-functions
 zmodule completion # completion must be sourced after all modules that add completion definitions

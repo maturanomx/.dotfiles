@@ -12,17 +12,9 @@ link() {
 
 OS="$(uname)"
 if [[ "${OS}" == "Linux" ]]; then
-	HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
-
 	sudo apt update
 	sudo apt -y upgrade
 	sudo apt -y install build-essential curl file git libreadline-dev procps
-elif [[ "${OS}" == "Darwin" ]]; then
-	HOMEBREW_PREFIX="/opt/homebrew"
-
-else
-	echo "Unsupported OS"
-	exit 1
 fi
 
 SSH_TYPE="ed25519"
@@ -31,11 +23,11 @@ if [[ ! -f "${SSH_FILENAME}" ]]; then
 	ssh-keygen -t "${SSH_TYPE}" -N "" -f "${SSH_FILENAME}" -C "$(hostname)"
 fi
 
-if [[ ! -x "${HOMEBREW_PREFIX}/bin/brew" ]]; then
+if [[ ! -z "$(command -v brew)" ]]; then
 	NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
-eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
+eval "$(brew shellenv)"
 brew bundle --file="${DOTFILES}/Brewfile"
 
 mkdir -p ${HOME}/.{config,private}
@@ -60,14 +52,8 @@ link ${DOTFILES}/bat ${HOME}/.config/bat
 link ${DOTFILES}/nvim ${HOME}/.config/nvim
 link ${DOTFILES}/wezterm/wezterm.lua ${HOME}/.wezterm.lua
 
-cp ${DOTFILES}/task/bugwarrior.toml ${HOME}/.private/
-
-if [[ ! $(grep -q "${HOMEBREW_PREFIX}/bin/zsh" /etc/shells) ]]; then
-	echo "${HOMEBREW_PREFIX}/bin/zsh" | sudo tee -a /etc/shells
-fi
-
-if [[ "$(basename ${SHELL})" != "zsh" || "${SHELL}" != "${HOMEBREW_PREFIX}/bin/zsh" ]]; then
-	chsh -s "${HOMEBREW_PREFIX}/bin/zsh"
+if [[ ! -f "${HOME}/.private/bugwarrior.toml" ]]; then
+	cp ${DOTFILES}/task/bugwarrior.toml ${HOME}/.private/
 fi
 
 bat cache --build

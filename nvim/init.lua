@@ -29,6 +29,7 @@ require("lazy").setup({
 		{
 			"folke/snacks.nvim",
 			opts = {
+				dashboard = { enabled = false },
 				indent = {
 					chunk = {
 						char = {
@@ -37,8 +38,6 @@ require("lazy").setup({
 						},
 						enabled = true,
 					},
-					indent = { enabled = false },
-					scope = { enabled = false },
 				},
 			},
 		},
@@ -47,26 +46,60 @@ require("lazy").setup({
 
 		{ "LazyVim/LazyVim", import = "lazyvim.plugins", opts = { colorscheme = "catppuccin" } },
 
-		{
-			"MeanderingProgrammer/render-markdown.nvim",
-			opts = {
-				checkbox = { checked = { scope_highlight = "@markup.strikethrough" } },
-				code = { left_pad = 2, sign = false },
-				heading = { sign = false },
-			},
-		},
-
-		{ "olimorris/codecompanion.nvim", opts = {} },
-
+		{ import = "lazyvim.plugins.extras.formatting.prettier" },
 		{ import = "lazyvim.plugins.extras.lang.astro" },
 		{ import = "lazyvim.plugins.extras.lang.docker" },
 		{ import = "lazyvim.plugins.extras.lang.python" },
 		{ import = "lazyvim.plugins.extras.lang.sql" },
 		{ import = "lazyvim.plugins.extras.lang.typescript" },
+		{ import = "lazyvim.plugins.extras.linting.eslint" },
+
+		{
+			"obsidian-nvim/obsidian.nvim",
+			---@module 'obsidian'
+			---@type obsidian.config
+			opts = {
+				completion = {
+					blink = true,
+					min_chars = 2,
+					nvim_cmp = false,
+				},
+				daily_notes = {
+					alias_format = "%B %-d, %Y",
+					date_format = "%Y/%m/%Y-%m-%d",
+					default_tags = { "daily-notes" },
+					folder = "journal",
+					template = "daily.md",
+					workdays_only = true,
+				},
+				log_level = vim.log.levels.INFO,
+				new_notes_location = "notes_subdir",
+				notes_subdir = "notes",
+				preferred_link_style = "markdown",
+				templates = {
+					folder = "_templates",
+					substitutions = {
+						["date:dddd, DD MMMM YYYY"] = function()
+							return tostring(os.date("%A, %d %B %Y"))
+						end,
+						["date:MMMM DD, YYYY"] = function()
+							return tostring(os.date("%b %d, %Y"))
+						end,
+						["date:WW"] = function()
+							return tostring(os.date("%V"))
+						end,
+					},
+				},
+				workspaces = {
+					{
+						name = "brainotes",
+						path = "~/projects/brainotes",
+					},
+				},
+			},
+		},
 	},
 	ui = { border = "rounded" },
 })
-
-vim.opt.list = false
 
 -- vim: noet ci pi sts=0 sw=4 ts=4
