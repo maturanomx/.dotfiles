@@ -80,5 +80,3 @@ surface0 = '#313244'
 base = '#1e1e2e'
 mantle = '#181825'
 crust = '#11111b'
-
-# vim: noet ci pi sts=0 sw=4 ts=4

@@ -17,5 +17,3 @@ zmodule completion # completion must be sourced after all modules that add compl
 zmodule zdharma-continuum/fast-syntax-highlighting
 zmodule zsh-users/zsh-history-substring-search # Fish-like history search (up arrow). Must be sourced after zsh-syntax-highlighting
 zmodule zsh-users/zsh-autosuggestions          # Fish-like autosuggestions
-
-# vim: noet ci pi sts=0 sw=4 ts=4 ft=sh

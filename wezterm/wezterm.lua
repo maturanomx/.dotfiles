@@ -1,35 +1,48 @@
 local wezterm = require("wezterm")
 
+local PATH = "/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:" .. os.getenv("PATH")
+local VAULT_NAME = "brainotes"
+local VAULT_PATH = os.getenv("HOME") .. "/projects/" .. VAULT_NAME
+
 local act = wezterm.action
 local config = wezterm.config_builder()
+local lastWorkspace = nil
 
 config = {
+	adjust_window_size_when_changing_font_size = false,
 	color_scheme = "Catppuccin Mocha",
+	command_palette_bg_color = "#181825",
 	hide_tab_bar_if_only_one_tab = true,
 	keys = {
+		{ mods = "ALT", key = "Enter", action = act.DisableDefaultAssignment },
 		{ mods = "CMD|OPT", key = "LeftArrow", action = act.ActivateTabRelative(-1) },
 		{ mods = "CMD|OPT", key = "RightArrow", action = act.ActivateTabRelative(1) },
 		{
 			mods = "CTRL|SHIFT",
 			key = "j",
 			action = wezterm.action_callback(function(win, pane)
-				-- FIXME: already defined on `environment`
-				local OBSIDIAN_VAULT = "~/projects/brainotes"
+				local currentWorkspace = win:active_workspace()
 
-				win:perform_action(
-					act.SwitchToWorkspace({
-						name = "journal",
-						spawn = {
-							args = { "nvim", "-c", ":Obsidian today" },
-							cwd = OBSIDIAN_VAULT,
-							set_environment_variables = {
-								NVIM_APP_NAME = "journal",
-								OBSIDIAN_VAULT = OBSIDIAN_VAULT,
+				if currentWorkspace == VAULT_NAME then
+					win:perform_action(act.SwitchToWorkspace({ name = lastWorkspace }), pane)
+				else
+					lastWorkspace = currentWorkspace
+
+					win:perform_action(
+						act.SwitchToWorkspace({
+							name = VAULT_NAME,
+							spawn = {
+								args = { "nvim", "-c", ":Obsidian today" },
+								cwd = VAULT_PATH,
+								set_environment_variables = {
+									VAULT_NAME = VAULT_NAME,
+									VAULT_PATH = VAULT_PATH,
+								},
 							},
-						},
-					}),
-					pane
-				)
+						}),
+						pane
+					)
+				end
 			end),
 		},
 		{
@@ -49,8 +62,7 @@ config = {
 	},
 	macos_window_background_blur = 15,
 	set_environment_variables = {
-		-- FIXME: already defined on `environment`
-		PATH = "/opt/homebrew/bin:" .. os.getenv("PATH"),
+		PATH = PATH,
 	},
 	tab_bar_at_bottom = true,
 	-- use_fancy_tab_bar = false,
@@ -59,5 +71,3 @@ config = {
 }
 
 return config
-
--- vim: noet ci pi sts=0 sw=4 ts=4

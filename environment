@@ -10,11 +10,12 @@ export BUGWARRIORRC=${HOME}/.private/bugwarrior.toml
 export EDITOR=nvim
 export MISE_GLOBAL_CONFIG_FILE=${DOTFILES}/mise/config.toml
 export MISE_NODE_DEFAULT_PACKAGES_FILE=${DOTFILES}/mise/default-npm-packages
-export OBSIDIAN_VAULT=${HOME}/projects/brainotes
 export PATH="/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:${PATH}"
 export STARSHIP_CONFIG=${DOTFILES}/zsh/starship.toml
 export TASKOPENRC=${DOTFILES}/task/taskopen.ini
 export TASKRC=${DOTFILES}/task/taskrc
+export VAULT_NAME=brainotes
+export VAULT_PATH=${HOME}/projects/${VAULT_NAME}
 
 alias cat="bat"
 alias env="env | sort -i | rg -v LESS_ | rg -v __MISE"
@@ -24,5 +25,3 @@ alias t=task
 nvim() {
 	mise x lua@5.1 node@lts -- "${HOMEBREW_PREFIX}/bin/nvim" "$@"
 }
-
-# vim: noet ci pi sts=0 sw=4 ts=4 ft=sh

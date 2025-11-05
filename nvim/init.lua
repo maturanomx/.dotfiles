@@ -8,7 +8,7 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
 	checker = { enabled = true, frequency = 86400 }, -- check for plugin updates every 24h
-	dev = { path = "~/projects/lab", patterns = { "nvim" }, fallback = true },
+	dev = { path = os.getenv("HOME") .. "/projects/lab", patterns = { "nvim" }, fallback = true },
 	install = { colorscheme = { "catppuccin" } },
 	performance = {
 		rtp = {
@@ -92,8 +92,8 @@ require("lazy").setup({
 				},
 				workspaces = {
 					{
-						name = "brainotes",
-						path = "~/projects/brainotes",
+						name = os.getenv("VAULT_NAME"),
+						path = tostring(os.getenv("VAULT_PATH")),
 					},
 				},
 			},
@@ -101,5 +101,3 @@ require("lazy").setup({
 	},
 	ui = { border = "rounded" },
 })
-
--- vim: noet ci pi sts=0 sw=4 ts=4

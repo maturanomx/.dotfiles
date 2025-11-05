@@ -29,5 +29,3 @@ eval "$(zoxide init zsh --cmd cd)"
 if [[ -f "${HOME}/.private/envars" ]]; then
 	source "${HOME}/.private/envars"
 fi
-
-# vim: noet ci pi sts=0 sw=4 ts=4
