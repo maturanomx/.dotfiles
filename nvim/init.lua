@@ -47,6 +47,22 @@ require("lazy").setup({
 
 		{ "folke/tokyonight.nvim", enabled = false },
 
+		{
+			"jmbuhr/otter.nvim",
+			dependencies = {
+				"nvim-treesitter/nvim-treesitter",
+			},
+			config = function()
+				vim.api.nvim_create_autocmd({ "FileType" }, {
+					pattern = { "toml" },
+					group = vim.api.nvim_create_augroup("EmbedToml", {}),
+					callback = function()
+						require("otter").activate()
+					end,
+				})
+			end,
+		},
+
 		{ "LazyVim/LazyVim", import = "lazyvim.plugins", opts = { colorscheme = "catppuccin" } },
 
 		{ import = "lazyvim.plugins.extras.ai.sidekick" },
@@ -57,6 +73,17 @@ require("lazy").setup({
 		{ import = "lazyvim.plugins.extras.lang.sql" },
 		{ import = "lazyvim.plugins.extras.lang.typescript" },
 		{ import = "lazyvim.plugins.extras.linting.eslint" },
+
+		{
+			"nvim-treesitter/nvim-treesitter",
+			init = function()
+				require("vim.treesitter.query").add_predicate("is-mise?", function(_, _, bufnr, _)
+					local filepath = vim.api.nvim_buf_get_name(tonumber(bufnr) or 0)
+					local filename = vim.fn.fnamemodify(filepath, ":t")
+					return string.match(filename, ".*mise.*%.toml$") ~= nil
+				end, { force = true, all = false })
+			end,
+		},
 
 		{
 			"obsidian-nvim/obsidian.nvim",
