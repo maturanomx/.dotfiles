@@ -1,3 +1,6 @@
+vim.opt.spell = true
+vim.opt.spelllang = { "en" }
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	-- installing lazy.nvim
@@ -46,6 +49,7 @@ require("lazy").setup({
 
 		{ "LazyVim/LazyVim", import = "lazyvim.plugins", opts = { colorscheme = "catppuccin" } },
 
+		{ import = "lazyvim.plugins.extras.ai.sidekick" },
 		{ import = "lazyvim.plugins.extras.formatting.prettier" },
 		{ import = "lazyvim.plugins.extras.lang.astro" },
 		{ import = "lazyvim.plugins.extras.lang.docker" },

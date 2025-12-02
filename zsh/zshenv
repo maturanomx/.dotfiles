@@ -1,0 +1,3 @@
+setopt no_global_rcs
+
+export PATH="/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:${PATH}"

@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 
-SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
-source ${SCRIPT_DIR}/environment
-
-link() {
+function link() {
 	if [[ ! -L "${2}" || "$(readlink "${2}")" != "${1}" ]]; then
 		rm -rf "${2}"
 		ln -sv "${1}" "${2}"
 	fi
 }
+
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
 OS="$(uname)"
 if [[ "${OS}" == "Linux" ]]; then
@@ -23,12 +22,13 @@ if [[ ! -f "${SSH_FILENAME}" ]]; then
 	ssh-keygen -t "${SSH_TYPE}" -N "" -f "${SSH_FILENAME}" -C "$(hostname)"
 fi
 
-if [[ ! -z "$(command -v brew)" ]]; then
+PATH="/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:${PATH}"
+if [[ -z "$(command -v brew)" ]]; then
 	NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
 eval "$(brew shellenv)"
-brew bundle --file="${DOTFILES}/Brewfile"
+brew bundle --file="${SCRIPT_DIR}/Brewfile"
 
 mkdir -p ${HOME}/.{config,private}
 
@@ -42,17 +42,21 @@ if [[ ! -f "${HOME}/.private/gitconfig" ]]; then
 	name = ${NAME}
 _git_user
 fi
-link ${DOTFILES}/git/gitconfig ${HOME}/.gitconfig
+link ${SCRIPT_DIR}/git/gitconfig ${HOME}/.gitconfig
 
 # ZSH
-link ${DOTFILES}/environment ${HOME}/.zshenv
-link ${DOTFILES}/zsh/zshrc ${HOME}/.zshrc
+mkdir -p ${HOME}/.config/fsh
+link ${SCRIPT_DIR}/zsh/zshenv ${HOME}/.zshenv
+link ${SCRIPT_DIR}/zsh/zshrc ${HOME}/.zshrc
+link ${SCRIPT_DIR}/zsh/catppuccin-mocha.ini ${HOME}/.config/fsh/catppuccin-mocha.ini
 
-link ${DOTFILES}/nvim ${HOME}/.config/nvim
-link ${DOTFILES}/wezterm/wezterm.lua ${HOME}/.wezterm.lua
+link ${SCRIPT_DIR}/nvim ${HOME}/.config/nvim
+link ${SCRIPT_DIR}/wezterm/wezterm.lua ${HOME}/.wezterm.lua
 
 if [[ ! -f "${HOME}/.private/bugwarrior.toml" ]]; then
-	cp ${DOTFILES}/task/bugwarrior.toml ${HOME}/.private/
+	cp ${SCRIPT_DIR}/task/bugwarrior.toml ${HOME}/.private/
 fi
 
 bat cache --build
+# TODO: execute
+# fast-theme XGD:catppuccin-mocha

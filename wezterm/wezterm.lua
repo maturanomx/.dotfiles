@@ -12,6 +12,7 @@ config = {
 	adjust_window_size_when_changing_font_size = false,
 	color_scheme = "Catppuccin Mocha",
 	command_palette_bg_color = "#181825",
+	font = wezterm.font_with_fallback({ "VictorMono Nerd Font", "Symbols Nerd Font Mono" }),
 	hide_tab_bar_if_only_one_tab = true,
 	keys = {
 		{ mods = "ALT", key = "Enter", action = act.DisableDefaultAssignment },
@@ -32,7 +33,7 @@ config = {
 						act.SwitchToWorkspace({
 							name = VAULT_NAME,
 							spawn = {
-								args = { "nvim", "-c", ":Obsidian today" },
+								args = { "nvim", "-c", ":e inbox.md" },
 								cwd = VAULT_PATH,
 								set_environment_variables = {
 									VAULT_NAME = VAULT_NAME,
@@ -64,9 +65,8 @@ config = {
 	set_environment_variables = {
 		PATH = PATH,
 	},
-	tab_bar_at_bottom = true,
 	-- use_fancy_tab_bar = false,
-	window_background_opacity = 0.9,
+	window_background_opacity = 0.97,
 	window_decorations = "RESIZE",
 }
 

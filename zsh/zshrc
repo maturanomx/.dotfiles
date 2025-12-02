@@ -1,31 +1,51 @@
-bindkey -e	# Set editor default keymap to emacs (`-e`) or vi (`-v`)
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+	source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
 
-__getZim () {
-	local __zimfw="https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh"
-	if (( ${+commands[curl]} )); then
-		curl -fsSL --create-dirs -o ${ZIM_HOME}/zimfw.zsh ${__zimfw}
-	else
-		mkdir -p ${ZIM_HOME} && wget -nv -O ${ZIM_HOME}/zimfw.zsh ${__zimfw}
-	fi
-}
+DOTFILES=${HOME}/.dotfiles
+
+WORDCHARS=${WORDCHARS//[\/=]/}
+ZIM_CONFIG_FILE=${DOTFILES}/zsh/zimrc
+ZIM_HOME=${ZDOTDIR:-${HOME}}/.zim
+ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+
+export BAT_CONFIG_DIR="${DOTFILES}/bat"
+export BUGWARRIORRC=${HOME}/.private/bugwarrior.toml
+export EDITOR=nvim
+export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -p -lman'"
+export MISE_GLOBAL_CONFIG_FILE=${DOTFILES}/mise/config.toml
+export MISE_NODE_DEFAULT_PACKAGES_FILE=${DOTFILES}/mise/default-npm-packages
+export TASKOPENRC=${DOTFILES}/task/taskopen.ini
+export TASKRC=${DOTFILES}/task/taskrc
+export VAULT_NAME=brainotes
+export VAULT_PATH=${HOME}/projects/${VAULT_NAME}
+
+[[ -f "${HOME}/.private/envars" ]] && source "${HOME}/.private/envars"
 
 
 zstyle ':zim:input' double-dot-expand yes
+zstyle ':zim:zmodule' use 'degit'
 
-# Download zimfw plugin manager if missing
-[[ ! -e ${ZIM_HOME}/zimfw.zsh ]] && __getZim
-# Install missing modules, and update ${ZIM_HOME}/init.zsh if missing or outdated
-[[ ! ${ZIM_HOME}/init.zsh -nt ${ZIM_CONFIG_FILE} ]] && source ${ZIM_HOME}/zimfw.zsh init -q
+
+[[ ! -e ${ZIM_HOME}/zimfw.zsh ]] && curl -fsSL --create-dirs -o ${ZIM_HOME}/zimfw.zsh https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+[[ ! ${ZIM_HOME}/init.zsh -nt ${ZIM_CONFIG_FILE} ]] && source ${ZIM_HOME}/zimfw.zsh init
+
+
 source ${ZIM_HOME}/init.zsh
+[[ -f ${DOTFILES}/zsh/p10k.zsh ]] && source ${DOTFILES}/zsh/p10k.zsh
 
-
-zmodload -F zsh/terminfo +p:terminfo
 
 eval "$(brew shellenv)"
 eval "$(mise activate bash)"
-eval "$(starship init zsh)"
 eval "$(zoxide init zsh --cmd cd)"
 
-if [[ -f "${HOME}/.private/envars" ]]; then
-	source "${HOME}/.private/envars"
-fi
+
+alias cat="bat"
+alias env="env | sort -i | rg -v LESS_ | rg -v __MISE"
+alias jwtd="jwt decode "
+alias mi=mise
+alias t=task
+
+
+dvim() { mise x lua@5.1 node@lts -- "${HOMEBREW_PREFIX}/bin/nvim" -c ":DBUIToggle" "$@" }
+nvim() { mise x lua@5.1 node@lts -- "${HOMEBREW_PREFIX}/bin/nvim" "$@" }
