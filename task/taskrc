@@ -1,5 +1,6 @@
 data.location=~/.private/task
 default.command=list
+verbose=no
 
 include ~/.dotfiles/task/catppuccin.theme
 
