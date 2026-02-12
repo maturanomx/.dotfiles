@@ -75,7 +75,7 @@ config = {
 
 local function get_working_task()
 	local success, result, _ = wezterm.run_child_process({
-		"task",
+		"/opt/homebrew/bin/task",
 		"rc:" .. HOME .. "/.dotfiles/task/taskrc",
 		"rc.data.location:" .. HOME .. "/.private/task",
 		"rc.verbose:nothing",

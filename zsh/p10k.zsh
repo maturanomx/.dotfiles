@@ -30,6 +30,7 @@
     # os_icon               # os identifier
     dir                     # current directory
     background_jobs         # presence of background jobs
+    lab_icon                # `prompt_lab_icon` show test tube icon when is under `/lab` directory OR on a lab/* git branch
     # prompt_char           # prompt symbol
   )
 
@@ -1778,6 +1779,20 @@
   # can slow down prompt by 1-2 milliseconds, so it's better to keep it turned off unless you
   # really need it.
   typeset -g POWERLEVEL9K_DISABLE_HOT_RELOAD=true
+
+  #######################[ lab_icon: lab indicator ]#######################
+  function prompt_lab_icon() {
+    local git_branch=""
+    if [[ -n $VCS_STATUS_LOCAL_BRANCH ]]; then
+      git_branch=$VCS_STATUS_LOCAL_BRANCH
+    elif git rev-parse --git-dir &>/dev/null; then
+      git_branch=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
+    fi
+
+    if [[ "$PWD" == */lab/* ]] || [[ "$PWD" == */lab ]] || [[ "$git_branch" == lab/* ]]; then
+      p10k segment -b 3 -f 0 -i '󰙨'
+    fi
+  }
 
   # If p10k is already loaded, reload configuration.
   # This works even with POWERLEVEL9K_DISABLE_HOT_RELOAD=true.
