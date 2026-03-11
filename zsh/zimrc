@@ -1,9 +1,11 @@
 zmodule environment # Sets sane Zsh built-in environment options
+zmodule joke/zim-mise
+
 zmodule fzf
 zmodule input # Applies correct bindkeys for input events
 zmodule jeffreytse/zsh-vi-mode
-zmodule joke/zim-mise
 zmodule romkatv/powerlevel10k --use degit
+#zmodule quantumnic/powerlevel10k --use degit
 zmodule termtitle # Sets a custom terminal title
 zmodule utility   # Utility aliases and functions. Adds colour to ls, grep and less
 

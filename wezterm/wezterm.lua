@@ -14,7 +14,7 @@ config = {
 	adjust_window_size_when_changing_font_size = false,
 	color_scheme = "Catppuccin Mocha",
 	command_palette_bg_color = "#181825",
-	font = wezterm.font_with_fallback({ "VictorMono Nerd Font", "Symbols Nerd Font Mono" }),
+	font = wezterm.font_with_fallback({ "Victor Mono", "Symbols Nerd Font" }),
 	hide_tab_bar_if_only_one_tab = true,
 	keys = {
 		{ mods = "ALT", key = "Enter", action = act.DisableDefaultAssignment },
@@ -63,12 +63,12 @@ config = {
 			}),
 		},
 	},
-	macos_window_background_blur = 15,
+	macos_window_background_blur = 12,
 	set_environment_variables = {
 		PATH = PATH,
 	},
 	-- use_fancy_tab_bar = false,
-	window_background_opacity = 0.9,
+	window_background_opacity = 0.95,
 	window_decorations = "RESIZE",
 	window_padding = { bottom = W_PADDING, left = W_PADDING, right = W_PADDING, top = W_PADDING },
 }

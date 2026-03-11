@@ -2,7 +2,6 @@
 *~
 .idea/
 .settings/
-.vscode/
 nbproject/
 *.sublime-*
 [._]*.s[a-w][a-z]

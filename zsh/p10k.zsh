@@ -31,6 +31,7 @@
     dir                     # current directory
     background_jobs         # presence of background jobs
     lab_icon                # `prompt_lab_icon` show test tube icon when is under `/lab` directory OR on a lab/* git branch
+    vi_mode                 # vi mode (you don't need this if you've enabled prompt_char)
     # prompt_char           # prompt symbol
   )
 
@@ -88,7 +89,6 @@
     midnight_commander      # midnight commander shell (https://midnight-commander.org/)
     nix_shell               # nix shell (https://nixos.org/nixos/nix-pills/developing-with-nix-shell.html)
     chezmoi_shell           # chezmoi shell (https://www.chezmoi.io/)
-    vi_mode                 # vi mode (you don't need this if you've enabled prompt_char)
     # vpn_ip                # virtual private network indicator
     # load                  # CPU load
     # disk_usage            # disk usage
