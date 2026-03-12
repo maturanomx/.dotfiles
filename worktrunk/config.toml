@@ -1,0 +1,13 @@
+worktree-path = "{{ repo_path }}/../.wt/{{ branch | sanitize }}/{{ repo }}"
+
+[post-create]
+copy = "wt step copy-ignored"
+install = "npm ci"
+
+[pre-remove]
+protect-dev = """
+if [[ {{ branch }} = poc/am-development ]]; then
+	echo "Branch 'poc/am-development' is protected - removal blocked"
+	exit 1
+fi
+"""

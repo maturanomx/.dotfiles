@@ -51,6 +51,7 @@ link ${SCRIPT_DIR}/zsh/zshrc ${HOME}/.zshrc
 link ${SCRIPT_DIR}/zsh/catppuccin-mocha.ini ${HOME}/.config/fsh/catppuccin-mocha.ini
 
 link ${SCRIPT_DIR}/nvim ${HOME}/.config/nvim
+link ${SCRIPT_DIR}/worktrunk ${HOME}/.config/worktrunk
 link ${SCRIPT_DIR}/wezterm/wezterm.lua ${HOME}/.wezterm.lua
 
 if [[ ! -f "${HOME}/.private/bugwarrior.toml" ]]; then

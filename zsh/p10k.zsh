@@ -263,7 +263,7 @@
   # This moves the truncation point to the right (positive offset) or to the left (negative offset)
   # relative to the marker. Plain "first" and "last" are equivalent to "first:0" and "last:0"
   # respectively.
-  typeset -g POWERLEVEL9K_DIR_TRUNCATE_BEFORE_MARKER=last
+  typeset -g POWERLEVEL9K_DIR_TRUNCATE_BEFORE_MARKER=first
   # Don't shorten this many last directory segments. They are anchors.
   typeset -g POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
   # Shorten directory if it's longer than this even if there is space for it. The value can
@@ -348,6 +348,47 @@
 
   # Custom prefix.
   # typeset -g POWERLEVEL9K_DIR_PREFIX='in '
+
+  # Replace the branch-name path segment with its parent in the displayed path
+  # (e.g. .../project/main → "project"; .../project/main/src → "project/src").
+  function prompt_dir_working_tree() {
+	local icon="󰘬 "
+    local branch
+    branch=$(git branch --show-current 2>/dev/null)
+    if [[ -z $branch || $PWD != *"/$branch"* ]]; then
+      echo -E "$P9K_CONTENT"
+      return
+    fi
+
+    # Path up to (and excluding) the branch segment; suffix is the rest after branch.
+    local path_up_to_branch suffix_after_branch
+    if [[ $PWD == *"/$branch" ]]; then
+      path_up_to_branch="${PWD%/$branch}"
+      suffix_after_branch=""
+    else
+      path_up_to_branch="${PWD%/$branch/*}"
+      suffix_after_branch="${PWD#*/$branch/}"
+    fi
+
+    local parent_name="${path_up_to_branch:t}"
+    local display_path="$parent_name${suffix_after_branch:+/$suffix_after_branch}"
+
+    # Use POWERLEVEL9K_DIR_* so styling matches the rest of the dir segment.
+    local fg_dir=${POWERLEVEL9K_DIR_FOREGROUND:-239}
+    local fg_anchor=${POWERLEVEL9K_DIR_ANCHOR_FOREGROUND:-238}
+    local bold_open="" bold_close=""
+    [[ $POWERLEVEL9K_DIR_ANCHOR_BOLD == true ]] && bold_open="%B" bold_close="%b"
+
+    local last_segment="${display_path:t}"
+    local rest="${display_path%/*}"
+	[[ $rest == $display_path ]] && rest=""
+    if [[ -n $rest ]]; then
+      echo -E "${icon}%F{${fg_dir}}${rest}/%b${bold_open}%F{${fg_anchor}}${last_segment}${bold_close}"
+    else
+      echo -E "${icon}${bold_open}%F{${fg_anchor}}${last_segment}${bold_close}"
+    fi
+  }
+  typeset -g POWERLEVEL9K_DIR_CONTENT_EXPANSION='$(prompt_dir_working_tree)'
 
   #####################################[ vcs: git status ]######################################
   # Version control background colors.
