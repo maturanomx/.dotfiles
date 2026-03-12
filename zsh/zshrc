@@ -3,6 +3,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 DOTFILES=${HOME}/.dotfiles
+WORDCHARS=${WORDCHARS//[\/=]/}
 
 
 export BAT_CONFIG_DIR="${DOTFILES}/bat"
@@ -62,7 +63,6 @@ alias mi=mise
 alias t=task
 alias uninstall_nvim="rm -rfv ${HOME}/.local/{share,state}/nvim ${HOME}/.cache/nvim ${DOTFILES}/nvim/*.json"
 
-WORDCHARS=${WORDCHARS//[\/=]/}
 
 dvim() { mise x lua@5.1 node@lts -- "${HOMEBREW_PREFIX}/bin/nvim" -c ":DBUIToggle" "$@" }
 nvim() { mise x lua@5.1 node@lts -- "${HOMEBREW_PREFIX}/bin/nvim" "$@" }
