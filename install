@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 function link() {
 	if [[ ! -L "${2}" || "$(readlink "${2}")" != "${1}" ]]; then
 		rm -rf "${2}"
@@ -11,53 +13,90 @@ SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
 OS="$(uname)"
 if [[ "${OS}" == "Linux" ]]; then
-	sudo apt update
-	sudo apt -y upgrade
-	sudo apt -y install build-essential curl file git libreadline-dev procps
+	source /etc/os-release
+	OS="${ID_LIKE:-${ID}}"
 fi
 
+case "${OS}" in
+*arch*)
+	# -------------------------------
+	# Paru for Arch - https://github.com/Morganamilo/paru
+	# -------------------------------
+	if ! command -v paru &>/dev/null; then
+		sudo pacman -Syu --noconfirm
+		sudo pacman -S --noconfirm --needed base-devel git
+
+		git clone https://aur.archlinux.org/paru.git /tmp/paru
+		(cd /tmp/paru && makepkg -si --noconfirm)
+	fi
+
+	paru -Syu --noconfirm
+	_cmdInstall="paru -S --noconfirm --needed"
+	PACKAGES_FILE="packages.arch"
+	;;
+Darwin)
+	# -------------------------------
+	# Homebrew for MacOS - https://brew.sh/
+	# -------------------------------
+	export PATH="/opt/homebrew/bin:/usr/local/bin:${PATH}"
+	if ! command -v brew >/dev/null 2>&1; then
+		xcode-select --install
+		NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+	fi
+	eval "$(brew shellenv)"
+
+	_cmdInstall="brew install"
+	PACKAGES_FILE="packages.brew"
+	;;
+*)
+	echo "Unsupported OS/distribution: ${OS}" >&2
+	exit 1
+	;;
+esac
+
+$_cmdInstall $(<"${SCRIPT_DIR}/packages.common") $(<"${SCRIPT_DIR}/${PACKAGES_FILE}")
+
+mkdir -p "${HOME}/.config" "${HOME}/.private"
+
+# ssh
 SSH_TYPE="ed25519"
 SSH_FILENAME="${HOME}/.ssh/id_${SSH_TYPE}"
+mkdir -p "${HOME}/.ssh"
 if [[ ! -f "${SSH_FILENAME}" ]]; then
 	ssh-keygen -t "${SSH_TYPE}" -N "" -f "${SSH_FILENAME}" -C "$(hostname)"
 fi
 
-PATH="/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:${PATH}"
-if [[ -z "$(command -v brew)" ]]; then
-	NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-fi
-
-eval "$(brew shellenv)"
-brew bundle --file="${SCRIPT_DIR}/Brewfile"
-
-mkdir -p ${HOME}/.{config,private}
-
-# GIT
+# git
 if [[ ! -f "${HOME}/.private/gitconfig" ]]; then
-	read -p "Enter you name: " NAME
-	read -p "Enter your email: " EMAIL
-	cat <<_git_user >${HOME}/.private/gitconfig
+	read -rp "Enter your name: " NAME
+	read -rp "Enter your email: " EMAIL
+	cat <<_git_user >"${HOME}/.private/gitconfig"
 [user]
 	email = ${EMAIL}
 	name = ${NAME}
 _git_user
 fi
-link ${SCRIPT_DIR}/git/gitconfig ${HOME}/.gitconfig
+link "${SCRIPT_DIR}/git/gitconfig" "${HOME}/.gitconfig"
+git -C "${SCRIPT_DIR}" remote set-url origin git@github.com:maturanomx/.dotfiles.git
 
-# ZSH
-mkdir -p ${HOME}/.config/fsh
-link ${SCRIPT_DIR}/zsh/zshenv ${HOME}/.zshenv
-link ${SCRIPT_DIR}/zsh/zshrc ${HOME}/.zshrc
-link ${SCRIPT_DIR}/zsh/catppuccin-mocha.ini ${HOME}/.config/fsh/catppuccin-mocha.ini
+# zsh
+if [[ "$SHELL" != */zsh ]]; then
+	chsh -s "$(which zsh)"
+fi
+mkdir -p "${HOME}/.config/fsh"
+link "${SCRIPT_DIR}/zsh/catppuccin-mocha.ini" "${HOME}/.config/fsh/catppuccin-mocha.ini"
+link "${SCRIPT_DIR}/zsh/zshenv" "${HOME}/.zshenv"
+link "${SCRIPT_DIR}/zsh/zshrc" "${HOME}/.zshrc"
 
-link ${SCRIPT_DIR}/nvim ${HOME}/.config/nvim
-link ${SCRIPT_DIR}/worktrunk ${HOME}/.config/worktrunk
-link ${SCRIPT_DIR}/wezterm/wezterm.lua ${HOME}/.wezterm.lua
+# other tools
+link "${SCRIPT_DIR}/nvim" "${HOME}/.config/nvim"
+link "${SCRIPT_DIR}/worktrunk" "${HOME}/.config/worktrunk"
+link "${SCRIPT_DIR}/wezterm/wezterm.lua" "${HOME}/.wezterm.lua"
 
 if [[ ! -f "${HOME}/.private/bugwarrior.toml" ]]; then
-	cp ${SCRIPT_DIR}/task/bugwarrior.toml ${HOME}/.private/
+	cp "${SCRIPT_DIR}/task/bugwarrior.toml" "${HOME}/.private/"
 fi
 
 bat cache --build
-# TODO: execute
-# fast-theme XGD:catppuccin-mocha
+
+[[ "${OS}" != "Darwin" ]] && sudo systemctl enable --now sshd
