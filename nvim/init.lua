@@ -24,7 +24,7 @@ require("lazy").setup({
 			name = "catppuccin",
 			opts = {
 				flavour = "mocha",
-				integrations = { blink_cmp = true },
+				integrations = { markview = true },
 				transparent_background = true,
 			},
 		},
@@ -63,7 +63,11 @@ require("lazy").setup({
 			end,
 		},
 
-		{ "LazyVim/LazyVim", import = "lazyvim.plugins", opts = { colorscheme = "catppuccin" } },
+		{
+			"LazyVim/LazyVim",
+			import = "lazyvim.plugins",
+			opts = { colorscheme = "catppuccin" },
+		},
 
 		{ import = "lazyvim.plugins.extras.ai.sidekick" },
 		{ import = "lazyvim.plugins.extras.formatting.prettier" },
@@ -86,40 +90,127 @@ require("lazy").setup({
 		},
 
 		{
-			"obsidian-nvim/obsidian.nvim",
-			---@module 'obsidian'
-			---@type obsidian.config
+			"OXY2DEV/markview.nvim",
+			lazy = false,
 			opts = {
-				completion = {
-					blink = true,
-					min_chars = 2,
-					nvim_cmp = false,
+				markdown = {
+					list_items = {
+						marker_minus = {
+							conceal_on_checkboxes = false,
+						},
+					},
+				},
+				markdown_inline = {
+					checkboxes = {
+						unchecked = {
+							hl = "MarkviewCheckboxProgress",
+							scope_hl = "MarkviewCheckboxProgress",
+							text = "[ ]",
+						},
+						[">"] = {
+							hl = "MarkviewCheckboxChecked",
+							scope_hl = "MarkviewCheckboxChecked",
+							text = "[]",
+						},
+						["="] = {
+							hl = "MarkviewCheckboxPending",
+							scope_hl = "MarkviewCheckboxPending",
+							text = "[]",
+						},
+						checked = {
+							hl = "MarkviewCheckboxCancelled",
+							scope_hl = "MarkviewCheckboxCancelled",
+							text = "[]",
+						},
+						["/"] = {
+							hl = "MarkviewCheckboxStriked",
+							scope_hl = "MarkviewCheckboxStriked",
+							text = "[󰿟]",
+						},
+					},
+				},
+			},
+		},
+
+		{
+			"obsidian-nvim/obsidian.nvim",
+			dependencies = { "nvim-lua/plenary.nvim" },
+			ft = "markdown",
+			config = function(_, opts)
+				require("obsidian").setup(opts)
+
+				vim.api.nvim_create_autocmd("User", {
+					pattern = "ObsidianNoteEnter",
+					callback = function(ev)
+						local today = os.date("%Y-%m-%d")
+						if not vim.api.nvim_buf_get_name(ev.buf):find(today, 1, true) then
+							return
+						end
+
+						local lines = vim.api.nvim_buf_get_lines(ev.buf, 0, -1, false)
+						local tasks_idx = nil
+						for i, line in ipairs(lines) do
+							if line == "## Tasks" then
+								tasks_idx = i
+								break
+							end
+						end
+
+						if not tasks_idx then
+							return
+						end
+						if lines[tasks_idx + 2] ~= "- [ ]" then
+							return
+						end
+
+						local result = vim.fn.systemlist("jira-daily")
+						if vim.v.shell_error ~= 0 or #result == 0 then
+							return
+						end
+
+						vim.api.nvim_buf_set_lines(ev.buf, tasks_idx + 1, tasks_idx + 2, false, result)
+						vim.cmd("write")
+					end,
+				})
+			end,
+			keys = {
+				{ "<leader>ob", "<cmd>Obsidian backlinks<cr>", desc = "Backlinks" },
+				{ "<leader>oc", "<cmd>Obsidian toggle_checkbox<cr>", desc = "Toggle checkbox" },
+				{ "<leader>od", "<cmd>Obsidian today<cr>", desc = "Daily note" },
+				{ "<leader>oD", "<cmd>Obsidian dailies<cr>", desc = "Browse daily notes" },
+				{ "<leader>ol", "<cmd>Obsidian links<cr>", desc = "Links in note" },
+				{ "<leader>on", "<cmd>Obsidian new<cr>", desc = "New note" },
+				{ "<leader>oo", "<cmd>Obsidian quick_switch<cr>", desc = "Open note" },
+				{ "<leader>or", "<cmd>Obsidian rename<cr>", desc = "Rename note" },
+				{ "<leader>os", "<cmd>Obsidian search<cr>", desc = "Search notes" },
+				{ "<leader>ot", "<cmd>Obsidian tags<cr>", desc = "Find by tag" },
+				{ "<leader>oT", "<cmd>Obsidian template<cr>", desc = "Insert template" },
+			},
+			opts = {
+				checkbox = {
+					order = { " ", ">", "=", "x", "/", "-" },
 				},
 				daily_notes = {
-					alias_format = "%B %-d, %Y",
 					date_format = "%Y/%m/%Y-%m-%d",
-					default_tags = { "daily-notes" },
-					folder = "journal",
+					default_tags = { "daily" },
 					template = "daily.md",
-					workdays_only = true,
 				},
-				log_level = vim.log.levels.INFO,
+				legacy_commands = false,
+				link = {
+					format = "shortest",
+					style = "markdown",
+				},
 				new_notes_location = "notes_subdir",
-				notes_subdir = "notes",
-				preferred_link_style = "markdown",
+				note_id_func = function(title)
+					if title ~= nil then
+						return title:gsub(" ", "-"):gsub("[^A-Za-z0-9-]", ""):lower()
+					else
+						return tostring(os.time())
+					end
+				end,
+				picker = { name = "snacks" },
 				templates = {
-					folder = "_templates",
-					substitutions = {
-						["date:dddd, DD MMMM YYYY"] = function()
-							return tostring(os.date("%A, %d %B %Y"))
-						end,
-						["date:MMMM DD, YYYY"] = function()
-							return tostring(os.date("%b %d, %Y"))
-						end,
-						["date:WW"] = function()
-							return tostring(os.date("%V"))
-						end,
-					},
+					folder = "_meta/templates",
 				},
 				workspaces = {
 					{

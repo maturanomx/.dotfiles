@@ -2,37 +2,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 	source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-DOTFILES=${HOME}/.dotfiles
 WORDCHARS=${WORDCHARS//[\/=]/}
-
-
-export BAT_CONFIG_DIR="${DOTFILES}/bat"
-export BUGWARRIORRC="${HOME}/.private/bugwarrior.toml"
-export EDITOR="nvim"
-export HOMEBREW_BUNDLE_FILE="${DOTFILES}/Brewfile"
-export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -p -lman'"
-export MISE_GLOBAL_CONFIG_FILE="${DOTFILES}/mise/config.toml"
-export MISE_NODE_DEFAULT_PACKAGES_FILE="${DOTFILES}/mise/default-npm-packages"
-export PATH="/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:/usr/local/bin:${HOME}/.local/bin:${PATH}"
-export TASKOPENRC="${DOTFILES}/task/taskopen.ini"
-export TASKRC="${DOTFILES}/task/taskrc"
-export VAULT_NAME="brainotes"
-export VAULT_PATH="${HOME}/projects/${VAULT_NAME}"
-
-
-[[ -f "${HOME}/.private/envars" ]] && source "${HOME}/.private/envars"
-
-# -------------------------------
-# Homebrew - https://brew.sh/
-# -------------------------------
-if ! command -v brew >/dev/null 2>&1; then
-	xcode-select --install
-	NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-	brew bundle install
-fi
-command -v brew >/dev/null 2>&1 && eval "$(brew shellenv)"
-
 
 # -------------------------------
 # Zimfw - https://zimfw.sh/
@@ -43,13 +13,13 @@ ZSH_AUTOSUGGEST_COMPLETION_IGNORE='(git *|mise *|brew *)'
 ZSH_AUTOSUGGEST_HISTORY_IGNORE='(cd *|ls *|pwd|exit|clear)'
 ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-[[ ! ${ZIM_HOME}/init.zsh -nt ${ZIM_CONFIG_FILE} ]] && source ${HOMEBREW_PREFIX}/share/zimfw.zsh init
+# [[ ! ${ZIM_HOME}/init.zsh -nt ${ZIM_CONFIG_FILE} ]] && source ${HOMEBREW_PREFIX}/share/zimfw.zsh init
+[[ ! ${ZIM_HOME}/init.zsh -nt ${ZIM_CONFIG_FILE} ]] && source /usr/share/zimfw/zimfw.zsh init
 source ${ZIM_HOME}/init.zsh
 source ${DOTFILES}/zsh/p10k.zsh
 
 zstyle ':zim:input' double-dot-expand yes
 zstyle ':zim:zmodule' use 'degit'
-
 
 
 command -v wt >/dev/null 2>&1 && eval "$(wt config shell init zsh)"
@@ -64,5 +34,4 @@ alias t=task
 alias uninstall_nvim="rm -rfv ${HOME}/.local/{share,state}/nvim ${HOME}/.cache/nvim ${DOTFILES}/nvim/*.json"
 
 
-dvim() { mise x lua@5.1 node@lts -- "${HOMEBREW_PREFIX}/bin/nvim" -c ":DBUIToggle" "$@" }
-nvim() { mise x lua@5.1 node@lts -- "${HOMEBREW_PREFIX}/bin/nvim" "$@" }
+dvim() { nvim -c ":DBUIToggle" "$@" }

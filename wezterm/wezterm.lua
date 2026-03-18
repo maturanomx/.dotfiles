@@ -14,11 +14,11 @@ config = {
 	adjust_window_size_when_changing_font_size = false,
 	color_scheme = "Catppuccin Mocha",
 	command_palette_bg_color = "#181825",
-	font = wezterm.font_with_fallback({ "Victor Mono", "Symbols Nerd Font" }),
+	font = wezterm.font_with_fallback({ "JetBrains Mono", "Victor Mono", "VictorMono Nerd Font", "Symbols Nerd Font" }),
 	hide_tab_bar_if_only_one_tab = true,
 	keys = {
-		{ mods = "ALT", key = "Enter", action = act.DisableDefaultAssignment },
-		{ mods = "CMD|OPT", key = "LeftArrow", action = act.ActivateTabRelative(-1) },
+		{ mods = "ALT",     key = "Enter",      action = act.DisableDefaultAssignment },
+		{ mods = "CMD|OPT", key = "LeftArrow",  action = act.ActivateTabRelative(-1) },
 		{ mods = "CMD|OPT", key = "RightArrow", action = act.ActivateTabRelative(1) },
 		{
 			mods = "CTRL|SHIFT",

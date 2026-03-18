@@ -5,7 +5,6 @@ annotation_links = true
 annotation_newlines = false
 description_length = 80
 inline_links = false
-log_file="/tmp/bugwarrior.log"
 log_level = "DEBUG"
 targets = [ "work" ]
 

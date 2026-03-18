@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+jira issue list \
+  --jql 'assignee = currentUser() AND sprint IN openSprints() AND resolution IS EMPTY' \
+  --order-by priority \
+  --raw \
+  2>/dev/null | jq -r '
+    .[] |
+    .key as $key |
+    (.fields.status.name | ascii_downcase) as $status |
+    .fields.summary as $summary |
+    (
+      [.fields.labels[] | ascii_downcase] +
+      [.fields.fixVersions[] | .name | ascii_downcase] +
+      (if .fields.parent.key? then [.fields.parent.key | ascii_downcase] else [] end)
+      | map("#" + gsub(" "; "-"))
+      | join(" ")
+    ) as $labels |
+    (if   $status == "in progress"  then "[>]"
+     elif $status == "code review"  then "[=]"
+     elif $status == "ready for qa" then "[x]"
+     else "[ ]" end) as $checkbox |
+    "- \($checkbox) \($summary) | [\($key)]\(if $labels != "" then " \($labels)" else "" end)"
+  '
