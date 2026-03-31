@@ -1,6 +1,6 @@
 worktree-path = "{{ repo_path }}/../.wt/{{ branch | sanitize }}/{{ repo }}"
 
-[post-create]
+[pre-start]
 copy = "wt step copy-ignored"
 install = "npm ci"
 
