@@ -11,7 +11,7 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
 	checker = { enabled = true, frequency = 86400 }, -- check for plugin updates every 24h
-	dev = { path = os.getenv("HOME") .. "/projects/lab", patterns = { "nvim" }, fallback = true },
+	dev = { path = vim.env.HOME .. "/projects/lab", patterns = { "nvim" }, fallback = true },
 	install = { colorscheme = { "catppuccin" } },
 	performance = {
 		rtp = {
@@ -200,6 +200,7 @@ require("lazy").setup({
 					format = "shortest",
 					style = "markdown",
 				},
+				log_level = vim.log.levels.INFO,
 				new_notes_location = "notes_subdir",
 				note_id_func = function(title)
 					if title ~= nil then
@@ -214,8 +215,8 @@ require("lazy").setup({
 				},
 				workspaces = {
 					{
-						name = os.getenv("VAULT_NAME"),
-						path = tostring(os.getenv("VAULT_PATH")),
+						name = vim.env.VAULT_NAME,
+						path = vim.env.VAULT_PATH,
 					},
 				},
 			},

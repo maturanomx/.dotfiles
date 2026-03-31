@@ -13,8 +13,8 @@ ZSH_AUTOSUGGEST_COMPLETION_IGNORE='(git *|mise *|brew *)'
 ZSH_AUTOSUGGEST_HISTORY_IGNORE='(cd *|ls *|pwd|exit|clear)'
 ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-# [[ ! ${ZIM_HOME}/init.zsh -nt ${ZIM_CONFIG_FILE} ]] && source ${HOMEBREW_PREFIX}/share/zimfw.zsh init
-[[ ! ${ZIM_HOME}/init.zsh -nt ${ZIM_CONFIG_FILE} ]] && source /usr/share/zimfw/zimfw.zsh init
+[[ ! ${ZIM_HOME}/init.zsh -nt ${ZIM_CONFIG_FILE} ]] && source ${HOMEBREW_PREFIX}/share/zimfw.zsh init
+# [[ ! ${ZIM_HOME}/init.zsh -nt ${ZIM_CONFIG_FILE} ]] && source /usr/share/zimfw/zimfw.zsh init
 source ${ZIM_HOME}/init.zsh
 source ${DOTFILES}/zsh/p10k.zsh
 
