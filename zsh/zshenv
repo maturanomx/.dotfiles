@@ -6,6 +6,7 @@ export PATH="${HOME}/.local/bin:/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin
 export BAT_CONFIG_DIR="${DOTFILES}/bat"
 export BUGWARRIORRC="${HOME}/.private/bugwarrior.toml"
 export EDITOR="nvim"
+export KITTY_CONFIG_DIRECTORY="${DOTFILES}/kitty"
 export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -p -lman'"
 export MISE_GLOBAL_CONFIG_FILE="${DOTFILES}/mise/config.toml"
 export MISE_LOG_LEVEL=error
@@ -14,6 +15,5 @@ export TASKOPENRC="${DOTFILES}/task/taskopen.ini"
 export TASKRC="${DOTFILES}/task/taskrc"
 export VAULT_NAME="brainotes"
 export VAULT_PATH="${HOME}/projects/${VAULT_NAME}"
-export KITTY_CONFIG_DIRECTORY="${DOTFILES}/kitty"
 
 [[ -f "${HOME}/.private/envars" ]] && source "${HOME}/.private/envars"

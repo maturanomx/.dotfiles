@@ -20,7 +20,7 @@ fi
 case "${OS}" in
 *arch*)
 	# -------------------------------
-	# Paru for Arch - https://github.com/Morganamilo/paru
+	#  Paru for Arch - https://github.com/Morganamilo/paru
 	# -------------------------------
 	if ! command -v paru &>/dev/null; then
 		sudo pacman -Syu --noconfirm
@@ -36,7 +36,7 @@ case "${OS}" in
 	;;
 Darwin)
 	# -------------------------------
-	# Homebrew for MacOS - https://brew.sh/
+	#  Homebrew for MacOS - https://brew.sh/
 	# -------------------------------
 	export PATH="/opt/homebrew/bin:/usr/local/bin:${PATH}"
 	if ! command -v brew >/dev/null 2>&1; then
@@ -90,8 +90,8 @@ link "${SCRIPT_DIR}/zsh/zshrc" "${HOME}/.zshrc"
 
 # other tools
 link "${SCRIPT_DIR}/nvim" "${HOME}/.config/nvim"
-link "${SCRIPT_DIR}/worktrunk" "${HOME}/.config/worktrunk"
 link "${SCRIPT_DIR}/wezterm/wezterm.lua" "${HOME}/.wezterm.lua"
+link "${SCRIPT_DIR}/worktrunk" "${HOME}/.config/worktrunk"
 
 if [[ ! -f "${HOME}/.private/bugwarrior.toml" ]]; then
 	cp "${SCRIPT_DIR}/task/bugwarrior.toml" "${HOME}/.private/"
