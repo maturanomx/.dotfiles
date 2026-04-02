@@ -59,11 +59,11 @@
 
   # The list of segments shown on the left. Fill it with the most important segments.
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
-    # os_icon               # os identifier
+    os_icon                 # os identifier
     dir                     # current directory
     background_jobs         # presence of background jobs
-    status                  # exit code of the last command
     vi_mode                 # vi mode (you don't need this if you've enabled prompt_char)
+    status                  # exit code of the last command
   )
 
   # The list of segments shown on the right. Fill it with less important segments.
@@ -563,7 +563,7 @@
 
   # Status on success. No content, just an icon. No need to show it if prompt_char is enabled as
   # it will signify success by turning green.
-  typeset -g POWERLEVEL9K_STATUS_OK=true
+  typeset -g POWERLEVEL9K_STATUS_OK=false
   typeset -g POWERLEVEL9K_STATUS_OK_BACKGROUND=$P10K_COLOR_GREEN
   typeset -g POWERLEVEL9K_STATUS_OK_FOREGROUND=$P10K_COLOR_CRUST
   typeset -g POWERLEVEL9K_STATUS_OK_VISUAL_IDENTIFIER_EXPANSION='✔'
