@@ -98,6 +98,7 @@ if [[ ! -f "${HOME}/.private/bugwarrior.toml" ]]; then
 fi
 
 bat cache --build
+# npm config set prefix ~/.local/share/npm
 
 if [[ "${OS}" != "Darwin" ]]; then
 	sudo systemctl enable --now sshd

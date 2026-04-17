@@ -1,7 +1,7 @@
 setopt no_global_rcs
 
 export DOTFILES="${HOME}/.dotfiles"
-export PATH="${HOME}/.local/bin:/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:${DOTFILES}/_scripts:${PATH}"
+export PATH="${HOME}/.local/share/npm/bin:${HOME}/.local/bin:/opt/homebrew/bin:${DOTFILES}/_scripts:${PATH}"
 
 export BAT_CONFIG_DIR="${DOTFILES}/bat"
 export BUGWARRIORRC="${HOME}/.private/bugwarrior.toml"
