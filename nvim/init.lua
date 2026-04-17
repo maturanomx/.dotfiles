@@ -173,6 +173,9 @@ require("lazy").setup({
 					end
 				end,
 				picker = { name = "snacks" },
+				sync = {
+					enabled = true,
+				},
 				templates = {
 					folder = "_meta/templates",
 				},
