@@ -11,6 +11,12 @@ function link() {
 
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
+# WSL detection
+IS_WSL=false
+if grep -qi "microsoft\|wsl" /proc/sys/kernel/osrelease 2>/dev/null; then
+	IS_WSL=true
+fi
+
 OS="$(uname)"
 if [[ "${OS}" == "Linux" ]]; then
 	source /etc/os-release
@@ -34,6 +40,23 @@ case "${OS}" in
 	_cmdInstall="paru -S --noconfirm --needed"
 	PACKAGES_FILE="packages.arch"
 	;;
+*ubuntu*|*debian*)
+	# -------------------------------
+	#  APT for Ubuntu/Debian (covers WSL)
+	# -------------------------------
+	sudo apt update -y
+	sudo apt install -y curl git
+
+	# mise apt repo - https://mise.jdx.dev/installing-mise.html
+	sudo install -dm 755 /etc/apt/keyrings
+	curl -fSs https://mise.jdx.dev/gpg-key.pub | sudo tee /etc/apt/keyrings/mise-archive-keyring.asc 1>/dev/null
+	echo "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.asc] https://mise.jdx.dev/deb stable main" \
+		| sudo tee /etc/apt/sources.list.d/mise.list
+	sudo apt update -y
+
+	_cmdInstall="sudo apt install -y"
+	PACKAGES_FILE="packages.wsl"
+	;;
 Darwin)
 	# -------------------------------
 	#  Homebrew for MacOS - https://brew.sh/
@@ -54,11 +77,20 @@ Darwin)
 	;;
 esac
 
-$_cmdInstall $(<"${SCRIPT_DIR}/packages.common") $(<"${SCRIPT_DIR}/${PACKAGES_FILE}")
+if [[ "${IS_WSL}" == "true" ]]; then
+	$_cmdInstall $(<"${SCRIPT_DIR}/packages.wsl")
+else
+	$_cmdInstall $(<"${SCRIPT_DIR}/packages.common") $(<"${SCRIPT_DIR}/${PACKAGES_FILE}")
+fi
+
+# Install latest Neovim via mise (apt version is outdated)
+if [[ "${IS_WSL}" == "true" ]]; then
+	mise use -g neovim@latest
+fi
 
 mkdir -p "${HOME}/.config" "${HOME}/.private"
 
-# ssh
+# SSH
 SSH_TYPE="ed25519"
 SSH_FILENAME="${HOME}/.ssh/id_${SSH_TYPE}"
 mkdir -p "${HOME}/.ssh"
@@ -66,7 +98,7 @@ if [[ ! -f "${SSH_FILENAME}" ]]; then
 	ssh-keygen -t "${SSH_TYPE}" -N "" -f "${SSH_FILENAME}" -C "$(hostname)"
 fi
 
-# git
+# Git
 if [[ ! -f "${HOME}/.private/gitconfig" ]]; then
 	read -rp "Enter your name: " NAME
 	read -rp "Enter your email: " EMAIL
@@ -90,7 +122,9 @@ link "${SCRIPT_DIR}/zsh/zshrc" "${HOME}/.zshrc"
 
 # other tools
 link "${SCRIPT_DIR}/nvim" "${HOME}/.config/nvim"
-link "${SCRIPT_DIR}/wezterm/wezterm.lua" "${HOME}/.wezterm.lua"
+if [[ "${IS_WSL}" != "true" ]]; then
+	link "${SCRIPT_DIR}/wezterm/wezterm.lua" "${HOME}/.wezterm.lua"
+fi
 link "${SCRIPT_DIR}/worktrunk" "${HOME}/.config/worktrunk"
 
 if [[ ! -f "${HOME}/.private/bugwarrior.toml" ]]; then
@@ -100,8 +134,8 @@ fi
 bat cache --build
 # npm config set prefix ~/.local/share/npm
 
-if [[ "${OS}" != "Darwin" ]]; then
+if [[ "${OS}" != "Darwin" && "${IS_WSL}" != "true" ]]; then
 	sudo systemctl enable --now sshd
-	sudo systemctrl enable --now docker
+	sudo systemctl enable --now docker
 	sudo usermod -aG docker $USER
 fi
