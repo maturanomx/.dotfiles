@@ -1,111 +1,37 @@
 local wezterm = require("wezterm")
 
-local HOME = os.getenv("HOME")
-local PATH = "/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:" .. os.getenv("PATH")
-local VAULT_NAME = "brainotes"
-local VAULT_PATH = HOME .. "/projects/" .. VAULT_NAME
-
 local act = wezterm.action
 local config = wezterm.config_builder()
-local lastWorkspace = nil
+
 local W_PADDING = 3
 
 config = {
 	adjust_window_size_when_changing_font_size = false,
 	color_scheme = "Catppuccin Mocha",
 	command_palette_bg_color = "#181825",
-	font = wezterm.font_with_fallback({ "JetBrains Mono", "Victor Mono", "VictorMono Nerd Font", "Symbols Nerd Font" }),
+	font = wezterm.font_with_fallback({ "Victor Mono", "Symbols Nerd Font" }),
 	hide_tab_bar_if_only_one_tab = true,
-	keys = {
-		{ mods = "ALT",     key = "Enter",      action = act.DisableDefaultAssignment },
-		{ mods = "CMD|OPT", key = "LeftArrow",  action = act.ActivateTabRelative(-1) },
-		{ mods = "CMD|OPT", key = "RightArrow", action = act.ActivateTabRelative(1) },
-		{
-			mods = "CTRL|SHIFT",
-			key = "j",
-			action = wezterm.action_callback(function(win, pane)
-				local currentWorkspace = win:active_workspace()
-
-				if currentWorkspace == VAULT_NAME then
-					win:perform_action(act.SwitchToWorkspace({ name = lastWorkspace }), pane)
-				else
-					lastWorkspace = currentWorkspace
-
-					win:perform_action(
-						act.SwitchToWorkspace({
-							name = VAULT_NAME,
-							spawn = {
-								args = { "nvim", "-c", ":e inbox.md" },
-								cwd = VAULT_PATH,
-								set_environment_variables = {
-									VAULT_NAME = VAULT_NAME,
-									VAULT_PATH = VAULT_PATH,
-								},
-							},
-						}),
-						pane
-					)
-				end
-			end),
-		},
-		{
-			mods = "CTRL|SHIFT",
-			key = "n",
-			action = act.PromptInputLine({
-				description = wezterm.format({
-					{ Text = "Enter name for new workspace" },
-				}),
-				action = wezterm.action_callback(function(window, pane, line)
-					if line then
-						window:perform_action(act.SwitchToWorkspace({ name = line }), pane)
-					end
-				end),
-			}),
-		},
-	},
+	leader = { mods = "CTRL", key = "Space", timeout_milliseconds = 1000 },
 	macos_window_background_blur = 12,
-	set_environment_variables = {
-		PATH = PATH,
-	},
-	-- use_fancy_tab_bar = false,
+	use_fancy_tab_bar = false,
 	window_background_opacity = 0.95,
 	window_decorations = "RESIZE",
 	window_padding = { bottom = W_PADDING, left = W_PADDING, right = W_PADDING, top = W_PADDING },
 }
 
-local function get_working_task()
-	local success, result, _ = wezterm.run_child_process({
-		"/opt/homebrew/bin/task",
-		"rc:" .. HOME .. "/.dotfiles/task/taskrc",
-		"rc.data.location:" .. HOME .. "/.private/task",
-		"rc.verbose:nothing",
-		"status:pending",
-		"priority+",
-		"-WAITING",
-		"+ACTIVE",
-		"export",
-	}, {
-		PATH = PATH,
-	})
+config.keys = {
+	{ mods = "ALT", key = "Enter", action = act.DisableDefaultAssignment },
+	{ mods = "CMD|OPT", key = "LeftArrow", action = act.ActivateTabRelative(-1) },
+	{ mods = "CMD|OPT", key = "RightArrow", action = act.ActivateTabRelative(1) },
+}
 
-	if not success or not result then
-		return ""
-	end
+local workspaceManager = wezterm.plugin.require("https://github.com/ryanmsnyder/workspace-manager.wezterm")
 
-	local tasks = wezterm.json_parse(result)
-
-	if #tasks == 0 then
-		return ""
-	elseif #tasks == 1 then
-		return tasks[1].description
-	else
-		return tasks[1].description .. " (" .. #tasks - 1 .. "+)"
-	end
-end
+workspaceManager.apply_to_config(config)
+workspaceManager.zoxide_path = "/opt/homebrew/bin/zoxide"
 
 wezterm.on("update-status", function(window, pane)
 	local segments = {
-		get_working_task(),
 		pane:get_domain_name(),
 		window:active_workspace(),
 	}
