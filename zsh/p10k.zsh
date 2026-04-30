@@ -278,23 +278,24 @@
     .bzr
     .citc
     .git
-    .hg
-    .node-version
-    .python-version
     .go-version
-    .ruby-version
-    .lua-version
+    .hg
     .java-version
+    .lua-version
+    .mise.toml
+    .node-version
+    .obsidian
     .perl-version
     .php-version
-    .tool-versions
-    .mise.toml
+    .python-version
+    .ruby-version
     .shorten_folder_marker
     .svn
     .terraform
-    CVS
+    .tool-versions
     Cargo.toml
     composer.json
+    CVS
     go.mod
     package.json
     stack.yaml
