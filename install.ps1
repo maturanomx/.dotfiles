@@ -61,15 +61,17 @@ Add-ScoopBucket versions
 Add-ScoopBucket nerd-fonts
 
 $Packages = @(
-    "extras/claude",
+    # "extras/claude",
     "extras/googlechrome",
     "extras/keepassxc",
+    "extras/vcredist2022",
     "extras/neovim",
     "extras/obsidian",
     "extras/spotify",
     "extras/vscode",
     "extras/wezterm",
     "main/nodejs",
+    "main/pwsh",
     "nerd-fonts/NerdFontsSymbolsOnly"
     "nerd-fonts/Victor-Mono",
     "versions/firefox-developer"
