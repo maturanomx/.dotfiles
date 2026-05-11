@@ -19,6 +19,8 @@
 	verbose = true
 
 [core]
+	autocrlf = false
+	eol = lf
 	excludesfile = ~/.dotfiles/git/gitignore
 
 [credential]

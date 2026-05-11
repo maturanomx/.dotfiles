@@ -83,9 +83,20 @@ else
 	$_cmdInstall $(<"${SCRIPT_DIR}/packages.common") $(<"${SCRIPT_DIR}/${PACKAGES_FILE}")
 fi
 
-# Install latest Neovim via mise (apt version is outdated)
+# On WSL/Ubuntu, apt versions are too old. Install CLI tools via mise.
 if [[ "${IS_WSL}" == "true" ]]; then
-	mise use -g neovim@latest
+	eval "$(mise activate bash --shims)"
+	mise use -g \
+		bat@latest \
+		fd@latest \
+		fzf@latest \
+		gh@latest \
+		jq@latest \
+		lazygit@latest \
+		neovim@latest \
+		node@latest \
+		ripgrep@latest \
+		zoxide@latest
 fi
 
 mkdir -p "${HOME}/.config" "${HOME}/.private"
