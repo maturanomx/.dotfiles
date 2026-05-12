@@ -8,7 +8,10 @@ export BUGWARRIORRC="${HOME}/.private/bugwarrior.toml"
 export EDITOR="nvim"
 export KITTY_CONFIG_DIRECTORY="${DOTFILES}/kitty"
 export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -p -lman'"
+
 export MISE_GLOBAL_CONFIG_FILE="${DOTFILES}/mise/config.toml"
+# On Debian/Ubuntu, mise is the primary CLI package manager
+[[ -f /etc/debian_version ]] && export MISE_GLOBAL_CONFIG_FILE="${DOTFILES}/mise/config.managed.toml"
 export MISE_LOG_LEVEL=error
 export MISE_NODE_DEFAULT_PACKAGES_FILE="${DOTFILES}/mise/default-npm-packages"
 export TASKOPENRC="${DOTFILES}/task/taskopen.ini"

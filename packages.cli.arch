@@ -1,8 +1,8 @@
 7zip
 azure-cli
+bat
 claude-code
 cursor-cli
-cursor-ide-bin
 docker
 docker-compose
 ffmpeg
@@ -17,12 +17,7 @@ openssh
 poppler
 resvg
 timew
-ttf-nerd-fonts-symbols-mono
-ttf-victor-mono
-ttf-victor-mono-nerd
 usage
-vlc
 wl-clipboard
 worktrunk-bin
 yazi-nightly-bin
-zimfw
