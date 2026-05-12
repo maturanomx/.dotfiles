@@ -1,0 +1,7 @@
+build-essential
+ca-certificates
+docker.io
+docker-compose
+openssh-client
+openssh-server
+pkg-config

@@ -2,23 +2,23 @@
 
 set -euo pipefail
 
-function link() {
+link() {
 	if [[ ! -L "${2}" || "$(readlink "${2}")" != "${1}" ]]; then
 		rm -rf "${2}"
 		ln -sv "${1}" "${2}"
 	fi
 }
 
-SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
+log() {
+	printf "\n>>> %s\n" "$*"
+}
 
-# WSL detection
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
 IS_WSL=false
-if grep -qi "microsoft\|wsl" /proc/sys/kernel/osrelease 2>/dev/null; then
-	IS_WSL=true
-fi
-
 OS="$(uname)"
 if [[ "${OS}" == "Linux" ]]; then
+	grep -qi "microsoft\|wsl" /proc/sys/kernel/osrelease 2>/dev/null && IS_WSL=true
 	source /etc/os-release
 	OS="${ID_LIKE:-${ID}}"
 fi
@@ -26,24 +26,49 @@ fi
 case "${OS}" in
 *arch*)
 	# -------------------------------
-	#  Paru for Arch - https://github.com/Morganamilo/paru
+	# Paru for Arch 󰣇 - https://github.com/Morganamilo/paru
 	# -------------------------------
+	log "Installing packages via paru..."
 	if ! command -v paru &>/dev/null; then
-		sudo pacman -Syu --noconfirm
 		sudo pacman -S --noconfirm --needed base-devel git
 
-		git clone https://aur.archlinux.org/paru.git /tmp/paru
-		(cd /tmp/paru && makepkg -si --noconfirm)
+		PARU_DIR=$(mktemp -d)
+		git clone https://aur.archlinux.org/paru.git "${PARU_DIR}"
+		(cd "${PARU_DIR}" && makepkg -si --noconfirm)
+		rm -rf "${PARU_DIR}"
 	fi
 
 	paru -Syu --noconfirm
-	_cmdInstall="paru -S --noconfirm --needed"
-	PACKAGES_FILE="packages.arch"
+	paru -S --noconfirm --needed \
+		$(<"${SCRIPT_DIR}/packages.cli.common") \
+		$(<"${SCRIPT_DIR}/packages.cli.arch")
+
+	[[ "${IS_WSL}" == "true" ]] || paru -S --noconfirm --needed $(<"${SCRIPT_DIR}/packages.gui.arch")
+
+	# npm globals default to /usr/lib/node_modules (root-owned). Changed to a user-owned location
+	npm config set prefix "${HOME}/.local/share/npm"
 	;;
-*ubuntu*|*debian*)
+
+Darwin)
 	# -------------------------------
-	#  APT for Ubuntu/Debian (covers WSL)
+	# Homebrew for MacOS 󰀵 - https://brew.sh/
 	# -------------------------------
+	log "Installing packages via Homebrew..."
+	export PATH="/opt/homebrew/bin:/usr/local/bin:${PATH}"
+	if ! command -v brew &>/dev/null; then
+		NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+	fi
+	eval "$(brew shellenv)"
+
+	brew install $(<"${SCRIPT_DIR}/packages.cli.common")
+	brew bundle --file="${SCRIPT_DIR}/packages.brew"
+	;;
+
+*debian*|*ubuntu*)
+	# -------------------------------
+	#  APT for Debian 󰣚 / Ubuntu 󰕈 -
+	# -------------------------------
+	log "Installing packages via apt + mise..."
 	sudo apt update -y
 	sudo apt install -y curl git
 
@@ -54,62 +79,34 @@ case "${OS}" in
 		| sudo tee /etc/apt/sources.list.d/mise.list
 	sudo apt update -y
 
-	_cmdInstall="sudo apt install -y"
-	PACKAGES_FILE="packages.wsl"
-	;;
-Darwin)
-	# -------------------------------
-	#  Homebrew for MacOS - https://brew.sh/
-	# -------------------------------
-	export PATH="/opt/homebrew/bin:/usr/local/bin:${PATH}"
-	if ! command -v brew >/dev/null 2>&1; then
-		xcode-select --install
-		NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-	fi
-	eval "$(brew shellenv)"
+	sudo apt install -y \
+		$(<"${SCRIPT_DIR}/packages.cli.common") \
+		$(<"${SCRIPT_DIR}/packages.cli.debian")
 
-	_cmdInstall="brew install"
-	PACKAGES_FILE="packages.brew"
+	# apt versions are too old. Install CLI tools declared in mise/config.managed.toml
+	export MISE_GLOBAL_CONFIG_FILE="${SCRIPT_DIR}/mise/config.managed.toml"
+	eval "$(mise activate bash --shims)"
+	mise install
+
+	# CLI tools without apt packages
+	npm install -g @anthropic-ai/claude-code opencode-ai
 	;;
+
 *)
 	echo "Unsupported OS/distribution: ${OS}" >&2
 	exit 1
 	;;
 esac
 
-if [[ "${IS_WSL}" == "true" ]]; then
-	$_cmdInstall $(<"${SCRIPT_DIR}/packages.wsl")
-else
-	$_cmdInstall $(<"${SCRIPT_DIR}/packages.common") $(<"${SCRIPT_DIR}/${PACKAGES_FILE}")
-fi
+mkdir -p "${HOME}/.config"
+install -dm 700 "${HOME}/.private"
 
-# On WSL/Ubuntu, apt versions are too old. Install CLI tools via mise.
-if [[ "${IS_WSL}" == "true" ]]; then
-	eval "$(mise activate bash --shims)"
-	mise use -g \
-		bat@latest \
-		fd@latest \
-		fzf@latest \
-		gh@latest \
-		jq@latest \
-		lazygit@latest \
-		neovim@latest \
-		node@latest \
-		ripgrep@latest \
-		zoxide@latest
-fi
-
-mkdir -p "${HOME}/.config" "${HOME}/.private"
-
-# SSH
+log "Configuring SSH..."
 SSH_TYPE="ed25519"
 SSH_FILENAME="${HOME}/.ssh/id_${SSH_TYPE}"
-mkdir -p "${HOME}/.ssh"
-if [[ ! -f "${SSH_FILENAME}" ]]; then
-	ssh-keygen -t "${SSH_TYPE}" -N "" -f "${SSH_FILENAME}" -C "$(hostname)"
-fi
+[[ -f "${SSH_FILENAME}" ]] || ssh-keygen -t "${SSH_TYPE}" -N "" -f "${SSH_FILENAME}" -C "$(hostname)"
 
-# Git
+log "Configuring git..."
 if [[ ! -f "${HOME}/.private/gitconfig" ]]; then
 	read -rp "Enter your name: " NAME
 	read -rp "Enter your email: " EMAIL
@@ -118,35 +115,47 @@ if [[ ! -f "${HOME}/.private/gitconfig" ]]; then
 	email = ${EMAIL}
 	name = ${NAME}
 _git_user
+	chmod 600 "${HOME}/.private/gitconfig"
 fi
 link "${SCRIPT_DIR}/git/gitconfig" "${HOME}/.gitconfig"
+# Switch dotfiles remote to SSH (in case it was cloned via HTTPS)
 git -C "${SCRIPT_DIR}" remote set-url origin git@github.com:maturanomx/.dotfiles.git
 
-# zsh
-if [[ "$SHELL" != */zsh ]]; then
-	chsh -s "$(which zsh)"
-fi
+log "Configuring zsh..."
+[[ "$SHELL" == */zsh ]] || chsh -s "$(command -v zsh)"
 mkdir -p "${HOME}/.config/fsh"
 link "${SCRIPT_DIR}/zsh/catppuccin-mocha.ini" "${HOME}/.config/fsh/catppuccin-mocha.ini"
 link "${SCRIPT_DIR}/zsh/zshenv" "${HOME}/.zshenv"
 link "${SCRIPT_DIR}/zsh/zshrc" "${HOME}/.zshrc"
 
-# other tools
+log "Installing zimfw..."
+# zimfw - https://zimfw.sh
+ZIM_HOME="${HOME}/.zim"
+[[ -f "${ZIM_HOME}/zimfw.zsh" ]] || curl -fsSL --create-dirs \
+	-o "${ZIM_HOME}/zimfw.zsh" \
+	https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+
+log "Linking other tools..."
 link "${SCRIPT_DIR}/nvim" "${HOME}/.config/nvim"
-if [[ "${IS_WSL}" != "true" ]]; then
-	link "${SCRIPT_DIR}/wezterm/wezterm.lua" "${HOME}/.wezterm.lua"
-fi
+link "${SCRIPT_DIR}/wezterm/wezterm.lua" "${HOME}/.wezterm.lua"
 link "${SCRIPT_DIR}/worktrunk" "${HOME}/.config/worktrunk"
 
-if [[ ! -f "${HOME}/.private/bugwarrior.toml" ]]; then
-	cp "${SCRIPT_DIR}/task/bugwarrior.toml" "${HOME}/.private/"
-fi
+[[ -f "${HOME}/.private/bugwarrior.toml" ]] || cp "${SCRIPT_DIR}/task/bugwarrior.toml" "${HOME}/.private/"
 
 bat cache --build
-# npm config set prefix ~/.local/share/npm
 
-if [[ "${OS}" != "Darwin" && "${IS_WSL}" != "true" ]]; then
+if [[ "${OS}" != "Darwin" ]]; then
+	log "Enabling system services..."
 	sudo systemctl enable --now sshd
 	sudo systemctl enable --now docker
-	sudo usermod -aG docker $USER
+	sudo usermod -aG docker "${USER}"
 fi
+
+cat <<'_done'
+
+>>> Setup complete!
+>>> It is recommended to log out and back in for all changes to take effect:
+>>>   - Default shell (zsh)
+>>>   - Docker group membership (Linux)
+>>>   - PATH and environment from ~/.zshenv / ~/.zshrc
+_done
