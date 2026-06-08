@@ -1,3 +1,12 @@
+# --- core ---
+curl
+git
+mise
+tmux
+unzip
+zsh
+
+# --- dev ---
 build-essential
 ca-certificates
 docker.io
