@@ -22,8 +22,23 @@ config = {
 
 config.keys = {
 	{ mods = 'ALT', key = 'Enter', action = act.DisableDefaultAssignment },
-	{ mods = 'CMD|OPT', key = 'LeftArrow', action = act.ActivateTabRelative(-1) },
-	{ mods = 'CMD|OPT', key = 'RightArrow', action = act.ActivateTabRelative(1) },
+
+	-- Tab switching
+	{ mods = 'CTRL',       key = 'Tab', action = act.ActivateTabRelative(1) },
+	{ mods = 'CTRL|SHIFT', key = 'Tab', action = act.ActivateTabRelative(-1) },
+
+	-- Pane splits (- feels horizontal/below, \ feels vertical/right)
+	{ mods = 'LEADER', key = '-',  action = act.SplitVertical { domain = 'CurrentPaneDomain' } },
+	{ mods = 'LEADER', key = '\\', action = act.SplitHorizontal { domain = 'CurrentPaneDomain' } },
+
+	-- Pane focus (vim-standard HJKL)
+	{ mods = 'LEADER', key = 'h', action = act.ActivatePaneDirection 'Left' },
+	{ mods = 'LEADER', key = 'j', action = act.ActivatePaneDirection 'Down' },
+	{ mods = 'LEADER', key = 'k', action = act.ActivatePaneDirection 'Up' },
+	{ mods = 'LEADER', key = 'l', action = act.ActivatePaneDirection 'Right' },
+
+	-- Pane close
+	{ mods = 'LEADER', key = 'q', action = act.CloseCurrentPane { confirm = false } },
 }
 
 

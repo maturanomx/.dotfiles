@@ -2,6 +2,10 @@
 
 config-version = 2
 
+after-startup-command = [
+    'exec-and-forget borders active_color=0xffe0af68 inactive_color=0x40494d64 width=4.0',
+]
+
 # In i3, all workspaces are phantom
 persistent-workspaces = []
 
@@ -15,6 +19,14 @@ enable-normalization-opposite-orientation-for-nested-containers = false
 # Mouse follows focus when focused monitor changes
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 
+[gaps]
+inner.horizontal = 6
+inner.vertical   = 6
+outer.left       = 3
+outer.bottom     = 3
+outer.top        = 3
+outer.right      = 3
+
 [mode.main.binding]
     # See: https://nikitabobko.github.io/AeroSpace/goodies#open-a-new-window-with-applescript
     alt-enter = '''exec-and-forget osascript -e '
@@ -24,21 +36,21 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
     end tell'
     '''
 
-    # i3 wraps focus by default
-    alt-j =         'focus --boundaries-action wrap-around-the-workspace left'
-    alt-k =         'focus --boundaries-action wrap-around-the-workspace down'
-    alt-l =         'focus --boundaries-action wrap-around-the-workspace up'
-    alt-semicolon = 'focus --boundaries-action wrap-around-the-workspace right'
+    # vim-standard HJKL: H=left, J=down, K=up, L=right
+    alt-h = 'focus --boundaries-action wrap-around-the-workspace left'
+    alt-j = 'focus --boundaries-action wrap-around-the-workspace down'
+    alt-k = 'focus --boundaries-action wrap-around-the-workspace up'
+    alt-l = 'focus --boundaries-action wrap-around-the-workspace right'
 
-    alt-shift-j = 'move left'
-    alt-shift-k = 'move down'
-    alt-shift-l = 'move up'
-    alt-shift-semicolon = 'move right'
+    alt-shift-h = 'move left'
+    alt-shift-j = 'move down'
+    alt-shift-k = 'move up'
+    alt-shift-l = 'move right'
 
-    # Consider using 'join-with' command as a 'split' replacement if you want to enable
-    # normalizations
-    alt-h = 'split horizontal'
-    alt-v = 'split vertical'
+    # Splits: - looks horizontal, | looks vertical (mirrors <leader>- and <leader>| in neovim)
+    # Consider using 'join-with' command as a 'split' replacement if you want to enable normalizations
+    alt-minus = 'split horizontal'
+    alt-shift-backslash = 'split vertical'
 
     alt-f = 'fullscreen'
 
