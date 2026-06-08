@@ -1,0 +1,46 @@
+# --- core ---
+curl
+git
+mise
+tmux
+unzip
+zsh
+
+# --- cli ---
+bat
+claude-code
+opencode
+worktrunk-bin
+yazi-nightly-bin
+
+# --- dev ---
+azure-cli
+cursor-cli
+docker
+docker-compose
+ffmpeg
+imagemagick
+libnotify
+luarocks
+npm
+openssh
+poppler
+resvg
+timew
+usage
+
+# --- system ---
+7zip
+less
+man-db
+
+# desktop
+# --- gui & apps ---
+cursor-ide-bin
+vlc
+wl-clipboard
+
+# --- look & feel ---
+ttf-nerd-fonts-symbols-mono
+ttf-victor-mono
+ttf-victor-mono-nerd

@@ -5,6 +5,7 @@ export PATH="${HOME}/.local/share/npm/bin:${HOME}/.local/bin:/opt/homebrew/bin:$
 
 export BAT_CONFIG_DIR="${DOTFILES}/bat"
 export BUGWARRIORRC="${HOME}/.private/bugwarrior.toml"
+export DOCKER_DEFAULT_PLATFORM="linux/amd64"
 export EDITOR="nvim"
 export KITTY_CONFIG_DIRECTORY="${DOTFILES}/kitty"
 export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -p -lman'"

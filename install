@@ -40,10 +40,11 @@ case "${OS}" in
 
 	paru -Syu --noconfirm
 	paru -S --noconfirm --needed \
-		$(<"${SCRIPT_DIR}/packages.cli.common") \
-		$(<"${SCRIPT_DIR}/packages.cli.arch")
+		$(awk '/^# desktop/{exit} /^[a-zA-Z0-9]/{print}' "${SCRIPT_DIR}/packages.arch")
 
-	[[ "${IS_WSL}" == "true" ]] || paru -S --noconfirm --needed $(<"${SCRIPT_DIR}/packages.gui.arch")
+	[[ "${IS_WSL}" == "true" ]] || \
+		paru -S --noconfirm --needed \
+		$(awk 'f && /^[a-zA-Z0-9]/{print} /^# desktop/{f=1}' "${SCRIPT_DIR}/packages.arch")
 
 	# npm globals default to /usr/lib/node_modules (root-owned). Changed to a user-owned location
 	npm config set prefix "${HOME}/.local/share/npm"
@@ -56,15 +57,15 @@ Darwin)
 	log "Installing packages via Homebrew..."
 	export PATH="/opt/homebrew/bin:/usr/local/bin:${PATH}"
 	if ! command -v brew &>/dev/null; then
+		sudo -v
 		NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 	fi
 	eval "$(brew shellenv)"
 
-	brew install $(<"${SCRIPT_DIR}/packages.cli.common")
 	brew bundle --file="${SCRIPT_DIR}/packages.brew"
 	;;
 
-*debian*|*ubuntu*)
+*debian* | *ubuntu*)
 	# -------------------------------
 	#  APT for Debian 󰣚 / Ubuntu 󰕈 -
 	# -------------------------------
@@ -75,13 +76,12 @@ Darwin)
 	# mise apt repo - https://mise.jdx.dev/installing-mise.html
 	sudo install -dm 755 /etc/apt/keyrings
 	curl -fSs https://mise.jdx.dev/gpg-key.pub | sudo tee /etc/apt/keyrings/mise-archive-keyring.asc 1>/dev/null
-	echo "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.asc] https://mise.jdx.dev/deb stable main" \
-		| sudo tee /etc/apt/sources.list.d/mise.list
+	echo "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.asc] https://mise.jdx.dev/deb stable main" |
+		sudo tee /etc/apt/sources.list.d/mise.list
 	sudo apt update -y
 
 	sudo apt install -y \
-		$(<"${SCRIPT_DIR}/packages.cli.common") \
-		$(<"${SCRIPT_DIR}/packages.cli.debian")
+		$(grep '^[a-zA-Z0-9]' "${SCRIPT_DIR}/packages.debian")
 
 	# apt versions are too old. Install CLI tools declared in mise/config.managed.toml
 	export MISE_GLOBAL_CONFIG_FILE="${SCRIPT_DIR}/mise/config.managed.toml"
@@ -104,7 +104,12 @@ install -dm 700 "${HOME}/.private"
 log "Configuring SSH..."
 SSH_TYPE="ed25519"
 SSH_FILENAME="${HOME}/.ssh/id_${SSH_TYPE}"
-[[ -f "${SSH_FILENAME}" ]] || ssh-keygen -t "${SSH_TYPE}" -N "" -f "${SSH_FILENAME}" -C "$(hostname)"
+SSH_KEY_CREATED=false
+mkdir -p -m 700 "${HOME}/.ssh"
+if [[ ! -f "${SSH_FILENAME}" ]]; then
+	ssh-keygen -t "${SSH_TYPE}" -N "" -f "${SSH_FILENAME}" -C "$(hostname)"
+	SSH_KEY_CREATED=true
+fi
 
 log "Configuring git..."
 if [[ ! -f "${HOME}/.private/gitconfig" ]]; then
@@ -118,8 +123,15 @@ _git_user
 	chmod 600 "${HOME}/.private/gitconfig"
 fi
 link "${SCRIPT_DIR}/git/gitconfig" "${HOME}/.gitconfig"
-# Switch dotfiles remote to SSH (in case it was cloned via HTTPS)
-git -C "${SCRIPT_DIR}" remote set-url origin git@github.com:maturanomx/.dotfiles.git
+# Ensure dotfiles dir is a git repo with SSH remote (handles both clone and ZIP download cases)
+GIT_NEEDS_SYNC=false
+if ! git -C "${SCRIPT_DIR}" rev-parse --git-dir &>/dev/null; then
+	git -C "${SCRIPT_DIR}" init
+	git -C "${SCRIPT_DIR}" remote add origin git@github.com:maturanomx/.dotfiles.git
+	GIT_NEEDS_SYNC=true
+else
+	git -C "${SCRIPT_DIR}" remote set-url origin git@github.com:maturanomx/.dotfiles.git
+fi
 
 log "Configuring zsh..."
 [[ "$SHELL" == */zsh ]] || chsh -s "$(command -v zsh)"
@@ -142,7 +154,7 @@ link "${SCRIPT_DIR}/worktrunk" "${HOME}/.config/worktrunk"
 
 [[ -f "${HOME}/.private/bugwarrior.toml" ]] || cp "${SCRIPT_DIR}/task/bugwarrior.toml" "${HOME}/.private/"
 
-bat cache --build
+command -v bat &>/dev/null && bat cache --build
 
 if [[ "${OS}" != "Darwin" ]]; then
 	log "Enabling system services..."
@@ -159,3 +171,16 @@ cat <<'_done'
 >>>   - Docker group membership (Linux)
 >>>   - PATH and environment from ~/.zshenv / ~/.zshrc
 _done
+
+if [[ "${SSH_KEY_CREATED}" == "true" ]]; then
+	printf "\n>>> ACTION REQUIRED: Add your new SSH key to GitHub before continuing.\n"
+	printf "    https://github.com/settings/ssh/new\n\n"
+	cat "${SSH_FILENAME}.pub"
+fi
+
+if [[ "${GIT_NEEDS_SYNC}" == "true" ]]; then
+	printf "\n>>> ACTION REQUIRED: Sync dotfiles git history after adding the SSH key:\n\n"
+	printf "    git -C %s fetch origin\n" "${SCRIPT_DIR}"
+	printf "    git -C %s symbolic-ref HEAD refs/heads/main\n" "${SCRIPT_DIR}"
+	printf "    git -C %s reset --hard origin/main\n\n" "${SCRIPT_DIR}"
+fi
