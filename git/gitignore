@@ -24,3 +24,6 @@ mise.toml
 # SO
 .DS_Store
 _var
+
+# AI
+**/.claude/settings.local.json

@@ -152,6 +152,12 @@ link "${SCRIPT_DIR}/nvim" "${HOME}/.config/nvim"
 link "${SCRIPT_DIR}/wezterm/wezterm.lua" "${HOME}/.wezterm.lua"
 link "${SCRIPT_DIR}/worktrunk" "${HOME}/.config/worktrunk"
 
+if [[ "${OS}" == "Darwin" ]]; then
+	VSCODE_USER="${HOME}/Library/Application Support/Code/User"
+	mkdir -p "${VSCODE_USER}"
+	link "${SCRIPT_DIR}/vscode/keybindings.json" "${VSCODE_USER}/keybindings.json"
+fi
+
 [[ -f "${HOME}/.private/bugwarrior.toml" ]] || cp "${SCRIPT_DIR}/task/bugwarrior.toml" "${HOME}/.private/"
 
 command -v bat &>/dev/null && bat cache --build

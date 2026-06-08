@@ -1,3 +1,4 @@
+tap "FelixKratz/formulae"
 tap "mike-engel/jwt-cli"
 tap "nikitabobko/tap"
 tap "unsecretised/tap"
@@ -62,8 +63,8 @@ cask "visual-studio-code"
 
 
 # --- look & feel ---
+brew "FelixKratz/formulae/borders"
 cask "font-symbols-only-nerd-font"
 cask "font-victor-mono"
 cask "nikitabobko/tap/aerospace"
-cask "raycast"
 cask "rustcast"
