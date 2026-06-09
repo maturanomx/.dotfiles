@@ -1,37 +1,30 @@
-toggle_hotkey = "ALT+SPACE"
-clipboard_hotkey = "SUPER+SHIFT+C"
-event_duration = 60
-main_page = "blank"
-start_at_login = true
-placeholder = "Time to be productive!"
-search_url = "https://duckduckgo.com/search?q=%s"
-haptic_feedback = false
-cbhist = true
-show_trayicon = true
-shells = []
-search_dirs = ["~"]
-log_path = "/tmp/rustcast.log"
-debounce_delay = 300
 auto_update = true
+cbhist = true
+clipboard_hotkey = "SUPER+SHIFT+C"
+debounce_delay = 300
+event_duration = 60
+haptic_feedback = false
+log_path = "/tmp/rustcast.log"
+main_page = "blank"
+placeholder = "Time to be productive!"
+search_dirs = ["~"]
+search_url = "https://duckduckgo.com/search?q=%s"
+shells = []
+show_trayicon = true
+start_at_login = true
+toggle_hotkey = "ALT+SPACE"
 
 [buffer_rules]
-clear_on_hide = true
 clear_on_enter = true
+clear_on_hide = true
 
 [theme]
-text_color = [
-    0.95,
-    0.95,
-    0.96,
-]
-background_color = [
-    0.0,
-    0.0,
-    0.0,
-]
+background_color = [0.118, 0.118, 0.180]	# Mocha Base #1E1E2E
+background_opacity = 1.0
 blur = false
 show_icons = true
 show_scroll_bar = false
+text_color = [0.804, 0.839, 0.957]			# Mocha Text #CDD6F4
 
 [modes]
 

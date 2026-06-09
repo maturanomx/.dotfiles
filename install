@@ -42,9 +42,9 @@ case "${OS}" in
 	paru -S --noconfirm --needed \
 		$(awk '/^# desktop/{exit} /^[a-zA-Z0-9]/{print}' "${SCRIPT_DIR}/packages.arch")
 
-	[[ "${IS_WSL}" == "true" ]] || \
+	[[ "${IS_WSL}" == "true" ]] ||
 		paru -S --noconfirm --needed \
-		$(awk 'f && /^[a-zA-Z0-9]/{print} /^# desktop/{f=1}' "${SCRIPT_DIR}/packages.arch")
+			$(awk 'f && /^[a-zA-Z0-9]/{print} /^# desktop/{f=1}' "${SCRIPT_DIR}/packages.arch")
 
 	# npm globals default to /usr/lib/node_modules (root-owned). Changed to a user-owned location
 	npm config set prefix "${HOME}/.local/share/npm"
@@ -156,6 +156,9 @@ if [[ "${OS}" == "Darwin" ]]; then
 	VSCODE_USER="${HOME}/Library/Application Support/Code/User"
 	mkdir -p "${VSCODE_USER}"
 	link "${SCRIPT_DIR}/vscode/keybindings.json" "${VSCODE_USER}/keybindings.json"
+
+	mkdir -p "${HOME}/.config/aerospace"
+	link "${SCRIPT_DIR}/wm/aerospace.toml" "${HOME}/.config/aerospace/aerospace.toml"
 fi
 
 [[ -f "${HOME}/.private/bugwarrior.toml" ]] || cp "${SCRIPT_DIR}/task/bugwarrior.toml" "${HOME}/.private/"
