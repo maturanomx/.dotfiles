@@ -12,7 +12,7 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
 	checker = { enabled = true, frequency = 86400 }, -- check for plugin updates every 24h
 	dev = { path = vim.env.HOME .. "/projects/lab", patterns = { "nvim" }, fallback = true },
-	install = { colorscheme = { "catppuccin" } },
+	install = { colorscheme = { "catppuccin-nvim" } },
 	performance = {
 		rtp = {
 			disabled_plugins = { "gzip", "tarPlugin", "tohtml", "tutor", "zipPlugin" },
@@ -66,7 +66,7 @@ require("lazy").setup({
 		{
 			"LazyVim/LazyVim",
 			import = "lazyvim.plugins",
-			opts = { colorscheme = "catppuccin" },
+			opts = { colorscheme = "catppuccin-nvim" },
 		},
 
 		{ import = "lazyvim.plugins.extras.ai.sidekick" },
