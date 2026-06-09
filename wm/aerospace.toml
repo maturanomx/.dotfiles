@@ -31,12 +31,7 @@ outer.right      = 3
 
 [mode.main.binding]
     # See: https://nikitabobko.github.io/AeroSpace/goodies#open-a-new-window-with-applescript
-    alt-enter = '''exec-and-forget osascript -e '
-    tell application "Terminal"
-        do script
-        activate
-    end tell'
-    '''
+    alt-enter = 'exec-and-forget open -na WezTerm'
 
     # vim-standard HJKL: H=left, J=down, K=up, L=right
     alt-h = 'focus --boundaries-action wrap-around-the-workspace left'
@@ -51,8 +46,8 @@ outer.right      = 3
 
     # Splits: - looks horizontal, | looks vertical (mirrors <leader>- and <leader>| in neovim)
     # Consider using 'join-with' command as a 'split' replacement if you want to enable normalizations
-    alt-minus = 'split horizontal'
-    alt-shift-backslash = 'split vertical'
+    alt-minus = 'split vertical'
+    alt-shift-backslash = 'split horizontal'
 
     alt-f = 'fullscreen'
 
