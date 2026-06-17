@@ -1,4 +1,13 @@
-worktree-path = "{{ repo_path }}/../{{ branch | sanitize }}"
+worktree-path = "{{ repo_path }}/../_wts/{{ branch | sanitize }}/{{ repo }}"
+
+[pre-start]
+setup = "npm ci"
+
+[post-start]
+copy = "wt step copy-ignored"
+
+[step.copy-ignored]
+exclude = ["build/", "coverage/", "dist/"]
 
 [pre-remove]
 protect-dev = """

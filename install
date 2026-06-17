@@ -193,3 +193,5 @@ if [[ "${GIT_NEEDS_SYNC}" == "true" ]]; then
 	printf "    git -C %s symbolic-ref HEAD refs/heads/main\n" "${SCRIPT_DIR}"
 	printf "    git -C %s reset --hard origin/main\n\n" "${SCRIPT_DIR}"
 fi
+
+# cp thisIsFine_animated.mp4 Library/Containers/com.microsoft.teams2/Data/Library/Application\ Support/Microsoft/MSTeams/Backgrounds/feelingDreamy4Animated_v=0.1.mp4

@@ -79,6 +79,15 @@ require("lazy").setup({
 		{ import = "lazyvim.plugins.extras.linting.eslint" },
 
 		{
+			"neovim/nvim-lspconfig",
+			opts = {
+				servers = {
+					harper_ls = {},
+				},
+			},
+		},
+
+		{
 			"nvim-treesitter/nvim-treesitter",
 			init = function()
 				require("vim.treesitter.query").add_predicate("is-mise?", function(_, _, bufnr, _)
@@ -154,8 +163,9 @@ require("lazy").setup({
 					order = { " ", ">", "=", "x", "/", "-" },
 				},
 				daily_notes = {
-					date_format = "%Y/%m/%Y-%m-%d",
+					date_format = "YYYY/MM/YYYY-MM-DD",
 					default_tags = { "daily" },
+					folder = "log",
 					template = "daily.md",
 				},
 				legacy_commands = false,

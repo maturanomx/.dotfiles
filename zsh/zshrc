@@ -29,6 +29,7 @@ command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh --cmd cd)"
 alias cat="bat"
 alias env="env | sort -i | rg -v LESS_ | rg -v __MISE"
 alias jwtd="jwt decode "
+alias ls="gls --group-directories-first --color=auto"
 alias mi=mise
 alias t=task
 alias uninstall_nvim="rm -rfv ${HOME}/.local/{share,state}/nvim ${HOME}/.cache/nvim ${DOTFILES}/nvim/*.json"

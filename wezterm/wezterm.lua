@@ -14,7 +14,7 @@ config = {
 	leader = { mods = "CTRL", key = "Space", timeout_milliseconds = 1000 },
 	macos_window_background_blur = 12,
 	use_fancy_tab_bar = false,
-	window_background_opacity = 0.95,
+	window_background_opacity = 0.97,
 	window_decorations = "RESIZE",
 	window_padding = { bottom = W_PADDING, left = W_PADDING, right = W_PADDING, top = W_PADDING },
 }
