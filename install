@@ -160,6 +160,17 @@ if [[ "${OS}" == "Darwin" ]]; then
 
 	mkdir -p "${HOME}/.config/aerospace"
 	link "${SCRIPT_DIR}/wm/aerospace.toml" "${HOME}/.config/aerospace/aerospace.toml"
+
+	mkdir -p "${HOME}/.config/borders"
+	link "${SCRIPT_DIR}/wm/bordersrc" "${HOME}/.config/borders/bordersrc"
+
+	# altgr-intl layout (as in Linux). Keyboard layouts don't load from symlinks, so copy
+	KEYLAYOUT="/Library/Keyboard Layouts/us-altgr-intl.keylayout"
+	if ! cmp -s "${SCRIPT_DIR}/_assets/us-altgr-intl.keylayout" "${KEYLAYOUT}"; then
+		sudo install -m 644 "${SCRIPT_DIR}/_assets/us-altgr-intl.keylayout" "${KEYLAYOUT}"
+		printf ">>> Keyboard layout installed. After logging out and back in, add it via:\n"
+		printf "    System Settings > Keyboard > Input Sources > Edit > + > Others > us-altgr-intl\n"
+	fi
 fi
 
 [[ -f "${HOME}/.private/bugwarrior.toml" ]] || cp "${SCRIPT_DIR}/task/bugwarrior.toml" "${HOME}/.private/"
