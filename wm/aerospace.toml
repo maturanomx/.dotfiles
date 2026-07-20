@@ -30,7 +30,10 @@ outer.right      = 3
 
 [mode.main.binding]
     # See: https://nikitabobko.github.io/AeroSpace/goodies#open-a-new-window-with-applescript
-    alt-enter = 'exec-and-forget open -na WezTerm'
+    alt-enter = 'exec-and-forget open -na kitty'
+
+    # Toggle quick-note panel
+    alt-shift-enter = 'exec-and-forget ~/.dotfiles/_scripts/quick-note'
 
     # vim-standard HJKL: H=left, J=down, K=up, L=right
     alt-h = 'focus --boundaries-action wrap-around-the-workspace left'

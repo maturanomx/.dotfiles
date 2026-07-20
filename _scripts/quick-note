@@ -1,0 +1,14 @@
+#!/usr/bin/env zsh
+# Toggle floating panel: nvim in a kitty quick-access-terminal
+# the today's daily note and tasks.md
+
+# aerospace launches this with a minimal env. mise shims only land
+# in interactive shells.
+export PATH="${HOME}/.local/share/mise/shims:${PATH}"
+
+when="${1:-today}"
+tasks="${VAULT_PATH}/tasks.md"
+
+# NVIM_SCRATCHPAD: minimal UI, no copilot/harper (see nvim/init.lua).
+exec kitten quick-access-terminal --instance-group daily-note \
+	nvim --cmd 'let $NVIM_SCRATCHPAD = "1"' -c "Obsidian ${when}"

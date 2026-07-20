@@ -148,6 +148,7 @@ ZIM_HOME="${HOME}/.zim"
 	https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
 
 log "Linking other tools..."
+link "${SCRIPT_DIR}/kitty" "${HOME}/.config/kitty"
 link "${SCRIPT_DIR}/nvim" "${HOME}/.config/nvim"
 link "${SCRIPT_DIR}/wezterm/wezterm.lua" "${HOME}/.wezterm.lua"
 link "${SCRIPT_DIR}/worktrunk" "${HOME}/.config/worktrunk"
