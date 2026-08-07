@@ -1,7 +1,20 @@
 setopt no_global_rcs
 
 export DOTFILES="${HOME}/.dotfiles"
-export PATH="${HOME}/.local/share/npm/bin:${HOME}/.local/bin:/opt/homebrew/bin:${DOTFILES}/_scripts:${PATH}"
+
+# Set manually rather than eval'ing `brew shellenv`: this file runs on every zsh invocation
+[[ -d /opt/homebrew ]] && export HOMEBREW_PREFIX="/opt/homebrew"
+
+# zsh ties $path to $PATH; -U dedupes it, so nested shells re-prepending don't grow PATH
+typeset -U path
+path=(
+	"${HOME}/.local/share/npm/bin"
+	"${HOME}/.local/bin"
+	${HOMEBREW_PREFIX:+${HOMEBREW_PREFIX}/bin}
+	${HOMEBREW_PREFIX:+${HOMEBREW_PREFIX}/opt/libpq/bin}
+	"${DOTFILES}/_scripts"
+	$path
+)
 
 export BAT_CONFIG_DIR="${DOTFILES}/bat"
 export BUGWARRIORRC="${HOME}/.private/bugwarrior.toml"
@@ -10,13 +23,15 @@ export EDITOR="nvim"
 export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -p -lman'"
 
 export MISE_GLOBAL_CONFIG_FILE="${DOTFILES}/mise/config.toml"
-# On Debian/Ubuntu, mise is the primary CLI package manager
-[[ -f /etc/debian_version ]] && export MISE_GLOBAL_CONFIG_FILE="${DOTFILES}/mise/config.managed.toml"
 export MISE_LOG_LEVEL=error
 export MISE_NODE_DEFAULT_PACKAGES_FILE="${DOTFILES}/mise/default-npm-packages"
 export TASKOPENRC="${DOTFILES}/task/taskopen.ini"
 export TASKRC="${DOTFILES}/task/taskrc"
 export VAULT_NAME="brainotes"
 export VAULT_PATH="${HOME}/projects/${VAULT_NAME}"
+export VISUAL="${EDITOR}"
+
+# On Debian/Ubuntu, mise is the primary CLI package manager
+[[ -f /etc/debian_version ]] && export MISE_GLOBAL_CONFIG_FILE="${DOTFILES}/mise/config.managed.toml"
 
 [[ -f "${HOME}/.private/envars" ]] && source "${HOME}/.private/envars"

@@ -14,12 +14,16 @@ ZSH_AUTOSUGGEST_HISTORY_IGNORE='(cd *|ls *|pwd|exit|clear)'
 ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
+zstyle ':zim:input' double-dot-expand yes
+zstyle ':zim:zmodule' use 'degit'
+
 [[ ! ${ZIM_HOME}/init.zsh -nt ${ZIM_CONFIG_FILE} ]] && source ${ZIM_HOME}/zimfw.zsh init
 source ${ZIM_HOME}/init.zsh
 source ${DOTFILES}/zsh/p10k.zsh
 
-zstyle ':zim:input' double-dot-expand yes
-zstyle ':zim:zmodule' use 'degit'
+
+cdpath=("${HOME}/projects")
+setopt CDABLE_VARS
 
 
 command -v wt >/dev/null 2>&1 && eval "$(wt config shell init zsh)"
@@ -29,6 +33,7 @@ command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh --cmd cd)"
 alias cat="bat"
 alias env="env | sort -i | rg -v LESS_ | rg -v __MISE"
 alias jwtd="jwt decode "
+alias ksh="kitten ssh"
 alias ls="gls --group-directories-first --color=auto"
 alias mi=mise
 alias t=task

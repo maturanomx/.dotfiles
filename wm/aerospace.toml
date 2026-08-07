@@ -3,9 +3,7 @@
 config-version = 2
 start-at-login = true
 
-after-startup-command = [
-    'exec-and-forget borders active_color=0xffa6e3a1 inactive_color=0x40585b70 width=3.0',
-]
+after-startup-command = []
 
 # In i3, all workspaces are phantom
 persistent-workspaces = []
@@ -19,6 +17,12 @@ enable-normalization-opposite-orientation-for-nested-containers = false
 
 # Mouse follows focus when focused monitor changes
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
+# AeroSpace is started by launchd, so it inherits PATH=/usr/bin:/bin:/usr/sbin:/sbin.
+# Without this, exec-and-forget can't find any Homebrew binary (borders, etc.)
+# and fails silently.
+[exec.env-vars]
+PATH = '/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}'
 
 [gaps]
 inner.horizontal = 6
@@ -34,6 +38,9 @@ outer.right      = 3
 
     # Toggle quick-note panel
     alt-shift-enter = 'exec-and-forget ~/.dotfiles/_scripts/quick-note'
+
+    # NOTE: alt-e/n/o must stay unbound: they type é ñ ó in the us-altgr-intl layout.
+    # alt-1/alt-5 shadow ¡ and € — accepted trade-off to keep workspace keys.
 
     # vim-standard HJKL: H=left, J=down, K=up, L=right
     alt-h = 'focus --boundaries-action wrap-around-the-workspace left'
@@ -55,7 +62,7 @@ outer.right      = 3
 
     alt-s = 'layout v_accordion' # 'layout stacking' in i3
     alt-w = 'layout h_accordion' # 'layout tabbed' in i3
-    alt-e = 'layout tiles horizontal vertical' # 'layout toggle split' in i3
+    alt-t = 'layout tiles horizontal vertical' # 'layout toggle split' in i3 (t for tiles; alt-e types é)
 
     alt-shift-space = 'layout floating tiling' # 'floating toggle' in i3
 

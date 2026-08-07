@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# Window borders - https://github.com/FelixKratz/JankyBorders
+#
+# Executed by borders itself on startup (see `man borders`). The Homebrew
+# service launches borders with no arguments, so all styling lives here
+# rather than in a window-manager startup command.
+
+options=(
+	active_color=0xffa6e3a1   # catppuccin green
+	inactive_color=0x40585b70 # catppuccin surface2, 25% alpha
+	width=3.0
+)
+
+borders "${options[@]}"
