@@ -25,12 +25,12 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 PATH = '/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}'
 
 [gaps]
-inner.horizontal = 6
-inner.vertical   = 6
-outer.left       = 3
-outer.bottom     = 3
+inner.horizontal = 9
+inner.vertical   = 9
+outer.left       = 6
+outer.bottom     = 6
 outer.top        = 3
-outer.right      = 3
+outer.right      = 6
 
 [mode.main.binding]
     # See: https://nikitabobko.github.io/AeroSpace/goodies#open-a-new-window-with-applescript

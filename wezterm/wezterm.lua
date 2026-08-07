@@ -9,7 +9,36 @@ config = {
 	adjust_window_size_when_changing_font_size = false,
 	color_scheme = "Catppuccin Mocha",
 	command_palette_bg_color = "#181825",
-	font = wezterm.font_with_fallback({ "Victor Mono", "Symbols Nerd Font" }),
+	font = wezterm.font_with_fallback({
+		{ family = "Victor Mono", weight = "DemiBold" },
+		"Symbols Nerd Font",
+	}),
+	font_rules = {
+		{
+			italic = true,
+			intensity = "Normal",
+			font = wezterm.font_with_fallback({
+				{ family = "Victor Mono", weight = "DemiBold", style = "Italic" },
+				"Symbols Nerd Font",
+			}),
+		},
+		{
+			intensity = "Bold",
+			italic = false,
+			font = wezterm.font_with_fallback({
+				{ family = "Victor Mono", weight = "Bold" },
+				"Symbols Nerd Font",
+			}),
+		},
+		{
+			intensity = "Bold",
+			italic = true,
+			font = wezterm.font_with_fallback({
+				{ family = "Victor Mono", weight = "Bold", style = "Italic" },
+				"Symbols Nerd Font",
+			}),
+		},
+	},
 	hide_tab_bar_if_only_one_tab = true,
 	leader = { mods = "CTRL", key = "Space", timeout_milliseconds = 1000 },
 	macos_window_background_blur = 12,
