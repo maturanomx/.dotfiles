@@ -3,14 +3,14 @@ vim.opt.spelllang = { "en" }
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
-	-- installing lazy.nvim
+	-- Installing lazy.nvim
 	local lazyrepo = "https://github.com/folke/lazy.nvim.git"
 	vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
 end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-	checker = { enabled = true, frequency = 86400 }, -- check for plugin updates every 24h
+	checker = { enabled = true, frequency = 86400 }, -- Check for plugin updates every 24h
 	dev = { path = vim.env.HOME .. "/projects/lab", patterns = { "nvim" }, fallback = true },
 	install = { colorscheme = { "catppuccin-nvim" } },
 	performance = {
@@ -24,7 +24,7 @@ require("lazy").setup({
 			name = "catppuccin",
 			opts = {
 				flavour = "mocha",
-				integrations = { markview = true },
+				integrations = { render_markdown = true },
 				transparent_background = true,
 			},
 		},
@@ -73,8 +73,10 @@ require("lazy").setup({
 		{ import = "lazyvim.plugins.extras.formatting.prettier" },
 		{ import = "lazyvim.plugins.extras.lang.astro" },
 		{ import = "lazyvim.plugins.extras.lang.docker" },
+		{ import = "lazyvim.plugins.extras.lang.markdown" },
 		{ import = "lazyvim.plugins.extras.lang.python" },
 		{ import = "lazyvim.plugins.extras.lang.sql" },
+		{ import = "lazyvim.plugins.extras.lang.toml" },
 		{ import = "lazyvim.plugins.extras.lang.typescript" },
 		{ import = "lazyvim.plugins.extras.linting.eslint" },
 
@@ -99,52 +101,10 @@ require("lazy").setup({
 		},
 
 		{
-			"OXY2DEV/markview.nvim",
-			lazy = false,
-			opts = {
-				markdown = {
-					list_items = {
-						marker_minus = {
-							conceal_on_checkboxes = false,
-						},
-					},
-				},
-				markdown_inline = {
-					checkboxes = {
-						unchecked = {
-							hl = "MarkviewCheckboxProgress",
-							scope_hl = "MarkviewCheckboxProgress",
-							text = "[ ]",
-						},
-						[">"] = {
-							hl = "MarkviewCheckboxChecked",
-							scope_hl = "MarkviewCheckboxChecked",
-							text = "[]",
-						},
-						["="] = {
-							hl = "MarkviewCheckboxPending",
-							scope_hl = "MarkviewCheckboxPending",
-							text = "[]",
-						},
-						checked = {
-							hl = "MarkviewCheckboxCancelled",
-							scope_hl = "MarkviewCheckboxCancelled",
-							text = "[]",
-						},
-						["/"] = {
-							hl = "MarkviewCheckboxStriked",
-							scope_hl = "MarkviewCheckboxStriked",
-							text = "[󰿟]",
-						},
-					},
-				},
-			},
-		},
-
-		{
 			"obsidian-nvim/obsidian.nvim",
 			dependencies = { "nvim-lua/plenary.nvim" },
 			ft = "markdown",
+			cmd = "Obsidian",
 			keys = {
 				{ "<leader>ob", "<cmd>Obsidian backlinks<cr>", desc = "Backlinks" },
 				{ "<leader>oc", "<cmd>Obsidian toggle_checkbox<cr>", desc = "Toggle checkbox" },
@@ -195,6 +155,36 @@ require("lazy").setup({
 						path = vim.env.VAULT_PATH,
 					},
 				},
+			},
+		},
+
+		{
+			"mfussenegger/nvim-lint",
+			opts = {
+				linters = {
+					-- stdin linting skips config discovery; point at the global
+					-- defaults explicitly (a project config in nvim's cwd still wins)
+					["markdownlint-cli2"] = {
+						args = { "--config", vim.fn.expand("~/.dotfiles/markdownlint/markdownlint-cli2.jsonc"), "-" },
+					},
+				},
+				linters_by_ft = {
+					-- shellcheck has no zsh dialect; `zsh -n` is the parse check
+					sh = { "shellcheck" },
+					zsh = { "zsh" },
+				},
+			},
+		},
+
+		{
+			"stevearc/conform.nvim",
+			opts = {
+				formatters = {
+					["markdownlint-cli2"] = {
+						prepend_args = { "--config", vim.fn.expand("~/.dotfiles/markdownlint/markdownlint-cli2.jsonc") },
+					},
+				},
+				formatters_by_ft = { zsh = { "shfmt" } },
 			},
 		},
 	},

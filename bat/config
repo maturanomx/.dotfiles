@@ -4,5 +4,3 @@
 
 --italic-text=always
 --theme="Catppuccin Mocha"
-
-# vim: ft=sh

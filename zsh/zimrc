@@ -18,4 +18,4 @@ zmodule zdharma-continuum/fast-syntax-highlighting
 zmodule zsh-users/zsh-history-substring-search # Fish-like history search (up arrow). Must be sourced after zsh-syntax-highlighting
 zmodule zsh-users/zsh-autosuggestions          # Fish-like autosuggestions
 
-# vim: ft=sh
+# vim: ft=zsh

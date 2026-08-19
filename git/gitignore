@@ -1,10 +1,11 @@
 # Editors and IDEs
+*.sublime-*
 *~
+.harper-dictionary.txt
 .idea/
 .settings/
-nbproject/
-*.sublime-*
 [._]*.s[a-w][a-z]
+nbproject/
 
 # ctags
 tags
@@ -27,3 +28,5 @@ _var
 
 # AI
 **/.claude/settings.local.json
+
+# vim: ft=gitignore

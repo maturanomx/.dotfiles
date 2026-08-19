@@ -35,3 +35,5 @@ uda.jiraparent.label=Jira Parent
 # END Bugwarrior UDAs
 
 news.version=3.4.0
+
+# vim: ft=confini
