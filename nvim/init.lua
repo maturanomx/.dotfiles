@@ -1,6 +1,3 @@
-vim.opt.spell = true
-vim.opt.spelllang = { "en" }
-
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	-- Installing lazy.nvim
@@ -84,7 +81,29 @@ require("lazy").setup({
 			"neovim/nvim-lspconfig",
 			opts = {
 				servers = {
-					harper_ls = {},
+					harper_ls = {
+						settings = {
+							["harper-ls"] = {
+								isolateEnglish = true,
+								linters = {
+									AvoidCurses = false,
+									Dashes = false,
+									EllipsisLength = false,
+									FillerWords = false,
+									Hedging = false,
+									LongSentences = false,
+									NumericRangeEnDash = false,
+									OrthographicConsistency = false,
+									OxfordComma = false,
+									SentenceCapitalization = false,
+									UseEllipsisCharacter = false,
+									UseTitleCase = false,
+								},
+								markdown = { IgnoreLinkTitle = true },
+								userDictPath = vim.fn.expand("~/.dotfiles/harper/dictionary.txt"),
+							},
+						},
+					},
 				},
 			},
 		},
@@ -189,4 +208,63 @@ require("lazy").setup({
 		},
 	},
 	ui = { border = "rounded" },
+})
+
+-- Prose: harper_ls owns spelling + grammar everywhere (it understands code
+-- identifiers, unlike 'spell'); native spell stays off, reserved for the
+-- Spanish toggle below. LazyVim's wrap_spell autocmd would re-enable spell in
+-- prose filetypes, so replace it with a wrap-only version.
+vim.api.nvim_create_autocmd("User", {
+	pattern = "VeryLazy",
+	callback = function()
+		pcall(vim.api.nvim_del_augroup_by_name, "lazyvim_wrap_spell")
+		vim.api.nvim_create_autocmd("FileType", {
+			group = vim.api.nvim_create_augroup("prose_wrap", { clear = true }),
+			pattern = { "text", "plaintex", "typst", "gitcommit", "markdown" },
+			callback = function()
+				vim.opt_local.wrap = true
+			end,
+		})
+		for _, win in ipairs(vim.api.nvim_list_wins()) do
+			vim.wo[win].spell = false
+		end
+
+		local function each_harper_ns(fn)
+			for id, ns in pairs(vim.diagnostic.get_namespaces()) do
+				if ns.name:find("harper", 1, true) then
+					fn(id)
+				end
+			end
+		end
+		local function harper_enable(enabled)
+			each_harper_ns(function(id)
+				vim.diagnostic.enable(enabled, { ns_id = id, bufnr = 0 })
+			end)
+		end
+		local function harper_enabled()
+			local enabled = true
+			each_harper_ns(function(id)
+				enabled = enabled and vim.diagnostic.is_enabled({ ns_id = id, bufnr = 0 })
+			end)
+			return enabled
+		end
+
+		Snacks.toggle({
+			name = "Harper",
+			get = harper_enabled,
+			set = harper_enable,
+		}):map("<leader>uH")
+
+		Snacks.toggle({
+			name = "Spanish",
+			get = function()
+				return vim.wo.spell and vim.bo.spelllang == "es"
+			end,
+			set = function(state)
+				vim.opt_local.spell = state
+				vim.opt_local.spelllang = state and "es" or "en"
+				harper_enable(not state)
+			end,
+		}):map("<leader>uS")
+	end,
 })
