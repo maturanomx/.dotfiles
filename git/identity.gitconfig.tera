@@ -1,0 +1,15 @@
+{%- set name = vars | get(key='name', default='') -%}
+{%- set email = vars | get(key='email', default='') -%}
+{%- if name and email %}
+[user]
+	name = {{ name }}
+	email = {{ email }}
+{%- else %}
+# Identity not configured (git refuses to commit until it is — user.useConfigOnly).
+# Create config.local.toml at the repo root with:
+#   [vars]
+#   name = "Your Name"
+#   email = "you@example.com"
+# then run: mise bootstrap dotfiles apply
+{%- endif %}
+{# 'vim' split so the modeline doesn't fire on this template #}# vim{{ '' }}: ft=gitconfig

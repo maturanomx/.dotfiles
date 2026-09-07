@@ -1,0 +1,22 @@
+[settings]
+experimental = true
+idiomatic_version_file_enable_tools = ['node']
+
+[tools]
+node = "lts"
+python = 'system'
+
+# Managed dotfiles common to every OS. macOS-only entries live in
+# config.macos.toml (loaded via MISE_ENV=macos, set in zsh/zshenv).
+# Sources are relative to this file's directory: the repo root.
+[dotfiles]
+"~/.config/fsh/catppuccin-mocha.ini" = { source = "zsh/catppuccin-mocha.ini" }
+"~/.config/kitty" = { source = "kitty" }
+"~/.config/nvim" = { source = "nvim" }
+"~/.config/worktrunk" = { source = "worktrunk" }
+"~/.gitconfig" = { source = "git/gitconfig" }
+"~/.prettierrc" = { source = "prettier/prettierrc" }
+"~/.private/gitconfig/identity" = { source = "git/identity.gitconfig.tera", template = "tera" }
+"~/.wezterm.lua" = { source = "wezterm/wezterm.lua" }
+"~/.zshenv" = { source = "zsh/zshenv" }
+"~/.zshrc" = { source = "zsh/zshrc" }

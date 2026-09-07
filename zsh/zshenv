@@ -17,21 +17,22 @@ path=(
 )
 
 export BAT_CONFIG_DIR="${DOTFILES}/bat"
-export BUGWARRIORRC="${HOME}/.private/bugwarrior.toml"
+export BUGWARRIORRC="${DOTFILES}/task/bugwarrior.toml"
 export DOCKER_DEFAULT_PLATFORM="linux/amd64"
 export EDITOR="nvim"
 export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -p -lman'"
-
-export MISE_GLOBAL_CONFIG_FILE="${DOTFILES}/mise/config.toml"
+export MISE_CONFIG_DIR="${DOTFILES}"
 export MISE_LOG_LEVEL=error
-export MISE_NODE_DEFAULT_PACKAGES_FILE="${DOTFILES}/mise/default-npm-packages"
+export MISE_NODE_DEFAULT_PACKAGES_FILE="${DOTFILES}/default-npm-packages"
 export TASKOPENRC="${DOTFILES}/task/taskopen.ini"
 export TASKRC="${DOTFILES}/task/taskrc"
 export VAULT_NAME="brainotes"
 export VAULT_PATH="${HOME}/projects/${VAULT_NAME}"
 export VISUAL="${EDITOR}"
 
-# On Debian/Ubuntu, mise is the primary CLI package manager
-[[ -f /etc/debian_version ]] && export MISE_GLOBAL_CONFIG_FILE="${DOTFILES}/mise/config.managed.toml"
+# Overlays on top of config.toml: macOS-only dotfiles on Darwin;
+# on Debian/Ubuntu the "managed" role makes mise the primary CLI package manager
+[[ "${OSTYPE}" == darwin* ]] && export MISE_ENV=macos
+[[ -f /etc/debian_version ]] && export MISE_ENV=managed
 
 [[ -f "${HOME}/.private/envars" ]] && source "${HOME}/.private/envars"

@@ -1,5 +1,6 @@
 __pycache__/
 Brewfile.lock.json
+config.local.toml
 nvim/lazy-lock.json
 nvim/lazyvim.json
 worktrunk/config.toml.lock

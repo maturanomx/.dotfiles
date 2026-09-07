@@ -2,13 +2,6 @@
 
 set -euo pipefail
 
-link() {
-	if [[ ! -L "${2}" || "$(readlink "${2}")" != "${1}" ]]; then
-		rm -rf "${2}"
-		ln -sv "${1}" "${2}"
-	fi
-}
-
 log() {
 	printf "\n>>> %s\n" "$*"
 }
@@ -19,9 +12,16 @@ IS_WSL=false
 OS="$(uname)"
 if [[ "${OS}" == "Linux" ]]; then
 	grep -qi "microsoft\|wsl" /proc/sys/kernel/osrelease 2>/dev/null && IS_WSL=true
+	# shellcheck disable=SC1091
 	source /etc/os-release
 	OS="${ID_LIKE:-${ID}}"
 fi
+
+# Same values zsh/zshenv exports on login shells; duplicated here because this script runs before the zshenv symlink
+# exists (mise creates it in the apply below)
+export MISE_CONFIG_DIR="${SCRIPT_DIR}"
+[[ "${OS}" == "Darwin" ]] && export MISE_ENV=macos
+[[ "${OS}" == *debian* || "${OS}" == *ubuntu* ]] && export MISE_ENV=managed
 
 case "${OS}" in
 *arch*)
@@ -39,9 +39,11 @@ case "${OS}" in
 	fi
 
 	paru -Syu --noconfirm
+	# shellcheck disable=SC2046 # word splitting is intentional: one arg per package
 	paru -S --noconfirm --needed \
 		$(awk '/^# desktop/{exit} /^[a-zA-Z0-9]/{print}' "${SCRIPT_DIR}/packages.arch")
 
+	# shellcheck disable=SC2046 # word splitting is intentional: one arg per package
 	[[ "${IS_WSL}" == "true" ]] ||
 		paru -S --noconfirm --needed \
 			$(awk 'f && /^[a-zA-Z0-9]/{print} /^# desktop/{f=1}' "${SCRIPT_DIR}/packages.arch")
@@ -80,11 +82,11 @@ Darwin)
 		sudo tee /etc/apt/sources.list.d/mise.list
 	sudo apt update -y
 
+	# shellcheck disable=SC2046 # word splitting is intentional: one arg per package
 	sudo apt install -y \
 		$(grep '^[a-zA-Z0-9]' "${SCRIPT_DIR}/packages.debian")
 
-	# apt versions are too old. Install CLI tools declared in mise/config.managed.toml
-	export MISE_GLOBAL_CONFIG_FILE="${SCRIPT_DIR}/mise/config.managed.toml"
+	# apt versions are too old. Install CLI tools declared in config.managed.toml
 	eval "$(mise activate bash --shims)"
 	mise install
 
@@ -101,28 +103,34 @@ esac
 mkdir -p "${HOME}/.config"
 install -dm 700 "${HOME}/.private"
 
+# Write the local vars file templates render from; unattended runs (no tty)
+# skip this and the epilogue prints instructions instead
+if [[ ! -f "${SCRIPT_DIR}/config.local.toml" && -t 0 ]]; then
+	log "Configuring identity..."
+	read -rp "Enter your name: " IDENTITY_NAME
+	read -rp "Enter your email: " IDENTITY_EMAIL
+	cat <<_vars >"${SCRIPT_DIR}/config.local.toml"
+[vars]
+name = "${IDENTITY_NAME}"
+email = "${IDENTITY_EMAIL}"
+_vars
+fi
+
+log "Applying dotfiles..."
+# --force replaces pre-existing files (OS defaults); day-2 runs use plain apply so drift surfaces
+mise bootstrap dotfiles apply --force --yes
+
 log "Configuring SSH..."
 SSH_TYPE="ed25519"
 SSH_FILENAME="${HOME}/.ssh/id_${SSH_TYPE}"
 SSH_KEY_CREATED=false
-mkdir -p -m 700 "${HOME}/.ssh"
+install -dm 700 "${HOME}/.ssh"
 if [[ ! -f "${SSH_FILENAME}" ]]; then
 	ssh-keygen -t "${SSH_TYPE}" -N "" -f "${SSH_FILENAME}" -C "$(hostname)"
 	SSH_KEY_CREATED=true
 fi
 
 log "Configuring git..."
-if [[ ! -f "${HOME}/.private/gitconfig" ]]; then
-	read -rp "Enter your name: " NAME
-	read -rp "Enter your email: " EMAIL
-	cat <<_git_user >"${HOME}/.private/gitconfig"
-[user]
-	email = ${EMAIL}
-	name = ${NAME}
-_git_user
-	chmod 600 "${HOME}/.private/gitconfig"
-fi
-link "${SCRIPT_DIR}/git/gitconfig" "${HOME}/.gitconfig"
 # Ensure dotfiles dir is a git repo with SSH remote (handles both clone and ZIP download cases)
 GIT_NEEDS_SYNC=false
 if ! git -C "${SCRIPT_DIR}" rev-parse --git-dir &>/dev/null; then
@@ -135,10 +143,6 @@ fi
 
 log "Configuring zsh..."
 [[ "$SHELL" == */zsh ]] || chsh -s "$(command -v zsh)"
-mkdir -p "${HOME}/.config/fsh"
-link "${SCRIPT_DIR}/zsh/catppuccin-mocha.ini" "${HOME}/.config/fsh/catppuccin-mocha.ini"
-link "${SCRIPT_DIR}/zsh/zshenv" "${HOME}/.zshenv"
-link "${SCRIPT_DIR}/zsh/zshrc" "${HOME}/.zshrc"
 
 log "Installing zimfw..."
 # zimfw - https://zimfw.sh
@@ -147,23 +151,7 @@ ZIM_HOME="${HOME}/.zim"
 	-o "${ZIM_HOME}/zimfw.zsh" \
 	https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
 
-log "Linking other tools..."
-link "${SCRIPT_DIR}/kitty" "${HOME}/.config/kitty"
-link "${SCRIPT_DIR}/nvim" "${HOME}/.config/nvim"
-link "${SCRIPT_DIR}/wezterm/wezterm.lua" "${HOME}/.wezterm.lua"
-link "${SCRIPT_DIR}/worktrunk" "${HOME}/.config/worktrunk"
-
 if [[ "${OS}" == "Darwin" ]]; then
-	VSCODE_USER="${HOME}/Library/Application Support/Code/User"
-	mkdir -p "${VSCODE_USER}"
-	link "${SCRIPT_DIR}/vscode/keybindings.json" "${VSCODE_USER}/keybindings.json"
-
-	mkdir -p "${HOME}/.config/aerospace"
-	link "${SCRIPT_DIR}/wm/aerospace.toml" "${HOME}/.config/aerospace/aerospace.toml"
-
-	mkdir -p "${HOME}/.config/borders"
-	link "${SCRIPT_DIR}/wm/bordersrc" "${HOME}/.config/borders/bordersrc"
-
 	# altgr-intl layout (as in Linux). Keyboard layouts don't load from symlinks, so copy
 	KEYLAYOUT="/Library/Keyboard Layouts/us-altgr-intl.keylayout"
 	if ! cmp -s "${SCRIPT_DIR}/_assets/us-altgr-intl.keylayout" "${KEYLAYOUT}"; then
@@ -172,8 +160,6 @@ if [[ "${OS}" == "Darwin" ]]; then
 		printf "    System Settings > Keyboard > Input Sources > Edit > + > Others > us-altgr-intl\n"
 	fi
 fi
-
-[[ -f "${HOME}/.private/bugwarrior.toml" ]] || cp "${SCRIPT_DIR}/task/bugwarrior.toml" "${HOME}/.private/"
 
 command -v bat &>/dev/null && bat cache --build
 
@@ -197,6 +183,11 @@ if [[ "${SSH_KEY_CREATED}" == "true" ]]; then
 	printf "\n>>> ACTION REQUIRED: Add your new SSH key to GitHub before continuing.\n"
 	printf "    https://github.com/settings/ssh/new\n\n"
 	cat "${SSH_FILENAME}.pub"
+fi
+
+if [[ ! -f "${SCRIPT_DIR}/config.local.toml" ]]; then
+	printf "\n>>> ACTION REQUIRED: Create %s/config.local.toml ([vars] name/email — template in ~/.private/gitconfig)\n" "${SCRIPT_DIR}"
+	printf "    then run: mise bootstrap dotfiles apply\n"
 fi
 
 if [[ "${GIT_NEEDS_SYNC}" == "true" ]]; then

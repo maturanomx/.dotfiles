@@ -16,9 +16,11 @@ only_on_new_tasks = true
 
 [work]
 ###### Import from Jira: https://bugwarrior.readthedocs.io/en/latest/services/jira.html
-# base_uri = "<must not have trailing slash>"
-# PAT = "<Personal Access Token>"
-# username = "<username>"
+###### Tracked file: no secrets or work-specific values. When enabling, read the
+###### PAT via the eval oracle, e.g. "@oracle:eval:sh -c '. ~/.private/envars && printenv JIRA_PAT'"
+# base_uri =
+# PAT =
+# username =
 add_tags = ["s_bw"]
 description_template = "{{ jirasummary | replace('\"', '') }}"
 import_labels_as_tags = false

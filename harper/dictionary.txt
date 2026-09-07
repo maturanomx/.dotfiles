@@ -1,8 +1,13 @@
+Cowork
 DIB
 MUI
+OS
 deps
+env
 eslint
+idempotently
 js
 jsx
+mise
 nvim
 shellcheck

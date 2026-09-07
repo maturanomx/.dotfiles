@@ -1,0 +1,15 @@
+# "managed" role overlay: loaded on top of config.toml when MISE_ENV=managed
+# (set in zsh/zshenv). Active where mise, not the distro package manager,
+# installs CLI tools — currently Debian/Ubuntu, where apt is too stale.
+[tools]
+bat = 'latest'
+fd = 'latest'
+fzf = 'latest'
+gh = 'latest'
+jq = 'latest'
+lazygit = 'latest'
+neovim = 'latest'
+node = 'latest'
+python = 'latest'
+ripgrep = 'latest'
+zoxide = 'latest'

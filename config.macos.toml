@@ -1,0 +1,5 @@
+# macOS overlay: loaded on top of config.toml when MISE_ENV=macos (set in zsh/zshenv)
+[dotfiles]
+"~/.config/aerospace/aerospace.toml" = { source = "wm/aerospace.toml" }
+"~/.config/borders/bordersrc" = { source = "wm/bordersrc" }
+"~/Library/Application Support/Code/User/keybindings.json" = { source = "vscode/keybindings.json" }

@@ -66,5 +66,8 @@
 [tag]
 	sort = version:refname
 
+[user]
+	# identity comes from the mise-managed block in ~/.private/gitconfig
+	useConfigOnly = true
 
-# vim: ft=dosini
+# vim: ft=gitconfig
